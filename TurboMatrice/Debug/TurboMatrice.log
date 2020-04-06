@@ -1,2 +1,5 @@
-﻿  LINK : C:\Users\onero\Documents\3A\TurboMatrice\Debug\TurboMatrice.exe introuvable ou non généré par la dernière édition de liens incrémentielle ; édition de liens complète en cours
+﻿  Matrice.cpp
+  TurboMatrice.cpp
+  Génération de code en cours...
+c:\users\onero\documents\3a\turbomatrice\turbomatrice\matrice.h(147): warning C4715: 'CMatrice<int>::getPreciseElement' : les chemins de contrôle ne retournent pas tous une valeur
   TurboMatrice.vcxproj -> C:\Users\onero\Documents\3A\TurboMatrice\Debug\TurboMatrice.exe

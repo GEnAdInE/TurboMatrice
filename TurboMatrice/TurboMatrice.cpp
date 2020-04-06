@@ -3,10 +3,19 @@
 
 #include <iostream>
 #include "Matrice.h"
+#include "Liste.h"
 
 int main()
 {
     std::cout << "Hello World!\n";
+	int a[3] = { 1,2,3, };
+	CListe<int> *testListe = new CListe<int>(3, a);
+	testListe->LISAdd(3, 4);
+	testListe->LISAdd(0, 0);
+	std::cout << testListe->LISGetElement(2);
+	testListe->LISRemove(3);
+	testListe->LISRemove(1);
+	/*
 	int **array = new int*[2]; // allocate an array of 2 int pointers — these are our rows
 	for (int count = 0; count < 2; ++count)
 		array[count] = new int[2]; // these are our columns
@@ -38,7 +47,7 @@ int main()
 	std::cout << result->getPreciseElement(1, 1);
 	std::cout << "\n";
 	//test->GetMatriceType().name();
-
+	*/
 }
 
 // Exécuter le programme : Ctrl+F5 ou menu Déboguer > Exécuter sans débogage
