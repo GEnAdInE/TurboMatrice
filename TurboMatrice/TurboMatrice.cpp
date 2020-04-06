@@ -2,10 +2,43 @@
 //
 
 #include <iostream>
+#include "Matrice.h"
 
 int main()
 {
     std::cout << "Hello World!\n";
+	int **array = new int*[2]; // allocate an array of 2 int pointers — these are our rows
+	for (int count = 0; count < 2; ++count)
+		array[count] = new int[2]; // these are our columns
+
+	array[0][0] = 1;
+	array[0][1] = 2;
+	array[1][0] = 3;
+	array[1][1] = 4;
+
+	CMatrice<int> *test = new CMatrice<int>(2,2,array);
+	CMatrice<int> *test2 = new CMatrice<int>(2, 2, array);
+	std::cout << test->getNbColumn();
+	std::cout << "\n";
+	std::cout << test->getNbLine();
+	std::cout << "\n";
+	std::cout << "\n";
+	std::cout << test->getPreciseElement(0, 0);
+	std::cout << test->getPreciseElement(0, 1);
+	std::cout << "\n";
+	std::cout << test->getPreciseElement(1, 0);
+	std::cout << test->getPreciseElement(1, 1);
+	std::cout << "\n";
+	CMatrice<int>* result = (*test+*test2);
+	std::cout << "\n";
+	std::cout << result->getPreciseElement(0, 0);
+	std::cout << result->getPreciseElement(0, 1);
+	std::cout << "\n";
+	std::cout << result->getPreciseElement(1, 0);
+	std::cout << result->getPreciseElement(1, 1);
+	std::cout << "\n";
+	//test->GetMatriceType().name();
+
 }
 
 // Exécuter le programme : Ctrl+F5 ou menu Déboguer > Exécuter sans débogage
