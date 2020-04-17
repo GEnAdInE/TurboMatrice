@@ -1,6 +1,7 @@
 #include <iostream>
 
-template <typename T> class CListe
+
+template <class T> class CListe
 {
 	private:
 		int iLISsize;
@@ -30,11 +31,13 @@ CListe<T>::CListe()
 template <typename T>
 CListe<T>::CListe(CListe<T> &param)
 {
-	iLISsize = param.LISGetSize();
+	iLISsize = param.iLISsize;
 	pLISArray = new T[iLISsize];
-	for (int i = 0; i < iLISsize; i++)
-	{
-		pLISArray[i] = param.pLISArray[i];
+	if (param.pLISArray != NULL) {
+		for (int i = 0; i < iLISsize; i++)
+		{
+			pLISArray[i] = param.pLISArray[i];
+		}
 	}
 
 }
@@ -43,9 +46,11 @@ CListe<T>::CListe(int iSize,T *pElement)
 {
 	iLISsize = iSize;
 	pLISArray = new T[iLISsize];
-	for (int i = 0; i < iLISsize; i++)
-	{
-		pLISArray[i] = pElement[i];
+	if (pElement != NULL) {
+		for (int i = 0; i < iLISsize; i++)
+		{
+			pLISArray[i] = pElement[i];
+		}
 	}
 
 }

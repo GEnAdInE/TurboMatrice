@@ -3,19 +3,23 @@
 
 #include <iostream>
 #include "Matrice.h"
-#include "Liste.h"
 
 int main()
 {
     std::cout << "Hello World!\n";
+	
+	// test des listes
+	/*
 	int a[3] = { 1,2,3, };
-	CListe<int> *testListe = new CListe<int>(3, a);
+	CListe<int> *testListe = new CListe<int>(3, NULL);
 	testListe->LISAdd(3, 4);
 	testListe->LISAdd(0, 0);
 	std::cout << testListe->LISGetElement(2);
 	testListe->LISRemove(3);
 	testListe->LISRemove(1);
-	/*
+	*/
+	
+	/*double array
 	int **array = new int*[2]; // allocate an array of 2 int pointers — these are our rows
 	for (int count = 0; count < 2; ++count)
 		array[count] = new int[2]; // these are our columns
@@ -23,31 +27,20 @@ int main()
 	array[0][0] = 1;
 	array[0][1] = 2;
 	array[1][0] = 3;
-	array[1][1] = 4;
+	array[1][1] = 4;*/
 
-	CMatrice<int> *test = new CMatrice<int>(2,2,array);
-	CMatrice<int> *test2 = new CMatrice<int>(2, 2, array);
-	std::cout << test->getNbColumn();
-	std::cout << "\n";
-	std::cout << test->getNbLine();
-	std::cout << "\n";
-	std::cout << "\n";
-	std::cout << test->getPreciseElement(0, 0);
-	std::cout << test->getPreciseElement(0, 1);
-	std::cout << "\n";
-	std::cout << test->getPreciseElement(1, 0);
-	std::cout << test->getPreciseElement(1, 1);
-	std::cout << "\n";
-	CMatrice<int>* result = (*test+*test2);
-	std::cout << "\n";
-	std::cout << result->getPreciseElement(0, 0);
-	std::cout << result->getPreciseElement(0, 1);
-	std::cout << "\n";
-	std::cout << result->getPreciseElement(1, 0);
-	std::cout << result->getPreciseElement(1, 1);
-	std::cout << "\n";
-	//test->GetMatriceType().name();
-	*/
+	int a[3] = { 1,2,3 };
+	int b[3] = { 4,5,6 };
+	int c[3] = { 7,8,9 };
+	CListe<int> *L1 = new CListe<int>(3, a);
+	CListe<int> *L2 = new CListe<int>(3, b);
+	CListe<int> *L3 = new CListe<int>(3, c);
+	CListe<int> * LTab[3] = { L1, L2, L3 };
+	CListe<CListe<int> *> *L4 = new CListe<CListe<int> *>(3, LTab);
+	 std::cout << L4->LISGetElement(0)->LISGetElement(0);
+
+	
+	
 }
 
 // Exécuter le programme : Ctrl+F5 ou menu Déboguer > Exécuter sans débogage

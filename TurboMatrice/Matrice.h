@@ -1,20 +1,21 @@
 #include <iostream>
+#include "Liste.h"
 
 
-template <typename T> class CMatrice
+template <typename T> class CMatrice : private CListe<T>
 {
 	private:
 		
 		int iNbLine;
 		int iNbColumn;
-		T** ppMatrix;
+		CListe<T>* pLISMatrix;
 
 	public:
 		
 		//constructor and destructor
 		CMatrice(void); //default constructor
 		CMatrice(CMatrice& mat);//Copy construcor !not finished
-		CMatrice(int iL, int iC, T** ppM); //Confort Constructor
+		CMatrice(int iL, int iC, CListe<T>* pLISM); //Confort Constructor
 		~CMatrice(void);//Destructor , maybe rework on it !!
 		
 		//Methodes utile
@@ -48,44 +49,47 @@ template <typename T> class CMatrice
 template <typename T>
 CMatrice<T>::CMatrice(void)
 {
-	setNbLine(0);
-	setNbColumn(0);
-	ppMatrix = NULL;
+	iNbLine = 0;
+	iNbColumn = 0;
+	pLISMatrix = new CListe<T>();
 }
 
 template <typename T>
 CMatrice<T>::CMatrice(CMatrice& mat)
 {
-	CMatrice(mat.getNbLine(), mat.getNbColumn(), mat.ppMatrix);
+	iNbLine = mat.getNbLine();
+	iNbColumn = mat.getNbColumn();
+	pLISMatrix = new CListe<T>(mat.pLISMatrix);
+	
 }
 
 
 
 template <typename T>
-CMatrice<T>::CMatrice(int iL, int iC, T** ppM)
+CMatrice<T>::CMatrice(int iL, int iC, CListe<T>* pLISM)
 {
-	setNbLine(iL);
-	setNbColumn(iC);
+	iNbLine = iL;
+	iNbColumn = iC;
 
-	ppMatrix = new T*[iC]; // allocate an array of iC int pointers — these are our rows
+	pLISMatrix = new CListe<T>(iC,NULL); // allocate an array of iC int pointers — these are our rows
 	for (int count = 0; count < iC; ++count)
-		ppMatrix[count] = new T[iL]; // these are our columns
+		pLISMatrix[count] = new CListe<T>(iL,NULL); // these are our columns
 
 	for (int i = 0; i < iC; i++)
 	{
 		for (int j = 0; j < iL; j++)
 		{
 
-			ppMatrix[i][j] = ppM[i][j];
+			pLISMatrix[i][j] = pLISM[i][j];
 		}
 	}
 
 }
 
 template <typename T>
-CMatrice<T>::~CMatrice()
+CMatrice<T>::~CMatrice(void)
 {
-	if (ppMatrix == NULL)
+	if (pLISMatrix == NULL)
 	{
 		if (iNbLine == 0 && iNbColumn == 0)
 		{
@@ -140,7 +144,7 @@ T CMatrice<T>::getPreciseElement(int i, int j)
 	{
 		if (j >= 0 && j < getNbLine())
 		{
-			return ppMatrix[i][j];
+			return pLISMatrix[i][j];
 		}
 	}
 
