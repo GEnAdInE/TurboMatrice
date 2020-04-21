@@ -1,86 +1,109 @@
 #include <iostream>
-#include "Liste.h"
 
 
-template <typename T> class CMatrice : private CListe<T>
+
+template <typename T> class CMatrice 
 {
 	private:
 		
-		int iNbLine;
+		int iNbRow;
 		int iNbColumn;
-		CListe<T>* pLISMatrix;
+		T** ppMatrix;
 
 	public:
 		
 		//constructor and destructor
 		CMatrice(void); //default constructor
-		CMatrice(CMatrice& mat);//Copy construcor !not finished
-		CMatrice(int iL, int iC, CListe<T>* pLISM); //Confort Constructor
+		CMatrice(CMatrice<T>& mat);//Copy construcor !not finished
+		CMatrice(int iL, int iC,T** ppMat); //Confort Constructor
 		~CMatrice(void);//Destructor , maybe rework on it !!
 		
 		//Methodes utile
-		void setNbLine(int l);
-		void setNbColumn(int c);
-		int getNbLine(void);
-		int getNbColumn(void);
-		T getPreciseElement(int i, int j);//return an element of the matrix by knowing his position 
+		void MATsetNbRow(int l);
+		void MATsetNbColumn(int c);
+		int MATgetNbRow(void);
+		int MATgetNbColumn(void);
+		T MATgetElement(int i, int j);//return an element of the matrix by knowing his position 
+		void MATaddRow(int iPos,T* row);
+		void MATaddColumn(int iPos,T* Column);
+		void MATremoveRow(int iPos);
+		void MATremoveColumn(int iPos);
+		bool MATsameDimension(CMatrice<T>& MATmatrice);
+		
 		//type_info GetMatriceType(void); // !! gather information about type_info
 		
 		
 
 		//Operateur matrice
-		CMatrice* operator+(CMatrice& MATmatrice);
-		CMatrice operator-(CMatrice MATmatrice);
-		CMatrice operator*(CMatrice MATmatrice);
-		// faire operateur [] 
+		CMatrice<T> operator+(CMatrice<T>& MATmatrice);
+		CMatrice<T> operator-(CMatrice<T>& MATmatrice);
+		CMatrice<T> operator*(CMatrice<T>& MATmatrice);
+		CMatrice<T>& operator+=(CMatrice<T>& MATmatrice);
+		CMatrice<T>& operator-=(CMatrice<T>& MATmatrice);
+		CMatrice<T>& operator*=(CMatrice<T>& MATmatrice);
+		// faire operateur [] qui retroune une collone ou un ligne a voir , faire =+ =- =* == != et =
 
 		//Operateur scalaire
-		CMatrice operator+(T c);
-		CMatrice operator*(T c);
-		CMatrice operator-(T c);
-		CMatrice operator/(T c);
+		
+		CMatrice<T> operator*(T c);
+		CMatrice<T> operator/(T c);
+		CMatrice<T> operator*=(T& c);
+		CMatrice<T> operator/=(T& c);
+		
 
 		//Autre operation
-		CMatrice tr(void); //transposé
-		CMatrice inv(void); //inverse
+		CMatrice<T> operator[](int iRow);
+		CMatrice<T>& operator=(CMatrice<T> MATmatrice);
+		bool operator==(CMatrice<T> MATmatrice);
+		bool operator!=(CMatrice<T> MATmatrice);
+		CMatrice<T> MATtr(void); //transposé
+		CMatrice<T> MATinv(void); //inverse
 
 };
 
 template <typename T>
 CMatrice<T>::CMatrice(void)
 {
-	iNbLine = 0;
+	iNbRow = 0;
 	iNbColumn = 0;
-	pLISMatrix = new CListe<T>();
+	ppMatrix = NULL;
 }
 
 template <typename T>
-CMatrice<T>::CMatrice(CMatrice& mat)
+CMatrice<T>::CMatrice(CMatrice<T>& mat)
 {
-	iNbLine = mat.getNbLine();
-	iNbColumn = mat.getNbColumn();
-	pLISMatrix = new CListe<T>(mat.pLISMatrix);
+	iNbRow = mat.MATgetNbRow();
+	iNbColumn = mat.MATgetNbColumn();
+	ppMatrix = new T*[iNbColumn]; // allocate an array of iC int pointers — these are our columns 
+
+	for (int count = 0; count < iNbColumn; ++count)
+		ppMatrix[count] = new T[iNbRow]; // these are our rows
+
+	for (int i = 0; i < iNbColumn; i++)
+	{
+		for (int j = 0; j < iNbRow; j++)
+		{
+			ppMatrix[i][j] = mat.ppMatrix[i][j];
+		}
+	}
 	
 }
 
-
-
 template <typename T>
-CMatrice<T>::CMatrice(int iL, int iC, CListe<T>* pLISM)
+CMatrice<T>::CMatrice(int iL, int iC, T** ppMat)
 {
-	iNbLine = iL;
+	iNbRow = iL;
 	iNbColumn = iC;
+	ppMatrix = new T*[iC]; // allocate an array of iC int pointers — these are our columns 
 
-	pLISMatrix = new CListe<T>(iC,NULL); // allocate an array of iC int pointers — these are our rows
 	for (int count = 0; count < iC; ++count)
-		pLISMatrix[count] = new CListe<T>(iL,NULL); // these are our columns
+		ppMatrix[count] = new T[iL]; // these are our rows
 
 	for (int i = 0; i < iC; i++)
 	{
 		for (int j = 0; j < iL; j++)
 		{
-
-			pLISMatrix[i][j] = pLISM[i][j];
+			ppMatrix[i][j] = ppMat[i][j];
 		}
 	}
 
@@ -89,9 +112,9 @@ CMatrice<T>::CMatrice(int iL, int iC, CListe<T>* pLISM)
 template <typename T>
 CMatrice<T>::~CMatrice(void)
 {
-	if (pLISMatrix == NULL)
+	if (ppMatrix == NULL)
 	{
-		if (iNbLine == 0 && iNbColumn == 0)
+		if (iNbRow == 0 && iNbColumn == 0)
 		{
 			free(this);
 		}
@@ -100,11 +123,11 @@ CMatrice<T>::~CMatrice(void)
 }
 
 template <typename T>
-void CMatrice<T>::setNbLine(int l)
+void CMatrice<T>::MATsetNbRow(int l)
 {
 	if (l >= 0)
 	{
-		iNbLine = l;
+		iNbRow = l;
 	}
 	else
 	{
@@ -113,7 +136,7 @@ void CMatrice<T>::setNbLine(int l)
 }
 
 template <typename T>
-void CMatrice<T>::setNbColumn(int c)
+void CMatrice<T>::MATsetNbColumn(int c)
 {
 	if (c >= 0)
 	{
@@ -126,38 +149,78 @@ void CMatrice<T>::setNbColumn(int c)
 }
 
 template <typename T>
-int CMatrice<T>::getNbLine(void)
+int CMatrice<T>::MATgetNbRow(void)
 {
-	return iNbLine;
+	return iNbRow;
 }
 
 template <typename T>
-int CMatrice<T>::getNbColumn(void)
+int CMatrice<T>::MATgetNbColumn(void)
 {
 	return iNbColumn;
 }
 
 template <typename T>
-T CMatrice<T>::getPreciseElement(int i, int j)
+T CMatrice<T>::MATgetElement(int i, int j)
 {
-	if (i >= 0 && i < getNbColumn())
+	if (i >= 0 && i < MATgetNbColumn())
 	{
-		if (j >= 0 && j < getNbLine())
+		if (j >= 0 && j < MATgetNbRow())
 		{
-			return pLISMatrix[i][j];
+			return ppMatrix[i][j];
 		}
 	}
 
 }
 
 template<typename T>
-CMatrice<T>* CMatrice<T>::operator+(CMatrice<T>& MATmatrice)
+bool CMatrice<T>::MATsameDimension(CMatrice<T> &mat)
+{
+	if (MATgetNbColumn() == mat.MATgetNbColumn())
+	{
+		if (MATgetNbRow() == mat.MATgetNbRow())
+		{
+			return true;
+		}
+	}
+	else
+		return false;
+}
+
+template<typename T>
+CMatrice<T> CMatrice<T>::operator+(CMatrice<T>& MATmatrice)
 {
 
-	if (getNbColumn() == MATmatrice.getNbColumn() && getNbLine() == MATmatrice.getNbLine())
+	if (MATsameDimension(MATmatrice))
 	{
-		int iL = getNbLine();
-		int iC = getNbColumn();
+		int iL = MATgetNbRow();
+		int iC = MATgetNbColumn();
+
+		T** tmpArray = new T*[iC]; // allocate an array of iC int pointers — these are our rows
+		for (int count = 0; count < iC; ++count)
+			tmpArray[count] = new T[iL]; // these are our columns
+
+		for (int i = 0; i < iC; i++)
+		{
+			for (int j = 0; j < iL; j++)
+			{
+				tmpArray[i][j] = MATgetElement(i, j) + MATmatrice.MATgetElement(i, j);
+			}
+		}
+		CMatrice<T>* MATresult = new CMatrice<T>(iL, iC, tmpArray);
+		return *MATresult;
+
+	}
+	
+}
+
+template<typename T>
+CMatrice<T> CMatrice<T>::operator-(CMatrice<T>& MATmatrice)
+{
+	if (MATsameDimension(MATmatrice))
+	{
+		int iL = MATgetNbRow();
+		int iC = MATgetNbColumn();
 
 		T** tmpArray = new T*[iC]; // allocate an array of iC int pointers — these are our rows
 		for (int count = 0; count < iC; ++count)
@@ -168,17 +231,56 @@ CMatrice<T>* CMatrice<T>::operator+(CMatrice<T>& MATmatrice)
 			for (int j = 0; j < iL; j++)
 			{
 
-				tmpArray[i][j] = getPreciseElement(i, j) + MATmatrice.getPreciseElement(i, j);
+				tmpArray[i][j] = MATgetElement(i, j) - MATmatrice.MATgetElement(i, j);
 			}
 		}
 		CMatrice<T>* MATresult = new CMatrice<T>(iL, iC, tmpArray);
-		return MATresult;
+		return *MATresult;
 
 	}
-	else
-	{
-		return NULL;
-	}
+	
 }
+
+template<typename T>
+CMatrice<T> CMatrice<T>::operator*(CMatrice<T>& MATmatrice)
+{
+	if (MATgetNbColumn()==MATmatrice.MATgetNbRow())
+	{
+		int iL = MATgetNbRow();
+		int iC = MATgetNbColumn();
+		int iC2 = MATmatrice.MATgetNbColumn();
+
+		//pas bon il faut associer une matrice de la bonne taille
+		T** tmpArray = new T*[iC]; // allocate an array of iC int pointers — these are our rows
+		for (int count = 0; count < iC; ++count)
+			tmpArray[count] = new T[iL]; // these are our columns
+
+		//revoir la methode de calcul car Mat3*2 * MAt2*3 marche pas bien
+		for (int i = 0; i < iL; i++)
+		{
+			for (int j = 0; j < iC2; j++)
+			{
+				for (int k = 0; k < iC; k++)
+				{
+					if (k == 0)
+					{
+						tmpArray[i][j] = MATgetElement(i, k) * MATmatrice.MATgetElement(k, j);
+					}
+					else
+					{
+						tmpArray[i][j] += MATgetElement(i, k) * MATmatrice.MATgetElement(k, j);
+					}
+					
+
+				}
+			}
+		}
+		CMatrice<T>* MATresult = new CMatrice<T>(iL, iC, tmpArray);
+		return *MATresult;
+
+	}
+	
+}
+
 
 

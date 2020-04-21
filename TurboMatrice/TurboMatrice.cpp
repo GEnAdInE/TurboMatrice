@@ -7,37 +7,44 @@
 int main()
 {
     std::cout << "Hello World!\n";
+
 	
-	// test des listes
-	/*
-	int a[3] = { 1,2,3, };
-	CListe<int> *testListe = new CListe<int>(3, NULL);
-	testListe->LISAdd(3, 4);
-	testListe->LISAdd(0, 0);
-	std::cout << testListe->LISGetElement(2);
-	testListe->LISRemove(3);
-	testListe->LISRemove(1);
-	*/
-	
-	/*double array
-	int **array = new int*[2]; // allocate an array of 2 int pointers — these are our rows
+	int **Array = new int*[2]; // allocate an array of 2 int pointers — these are our rows
 	for (int count = 0; count < 2; ++count)
-		array[count] = new int[2]; // these are our columns
+		Array[count] = new int[3]; // these are our columns
 
-	array[0][0] = 1;
-	array[0][1] = 2;
-	array[1][0] = 3;
-	array[1][1] = 4;*/
+	Array[0][0] = 1;
+	Array[0][1] = 2;
+	Array[0][2] = 3;
+    Array[1][0] = 4;
+	Array[1][1] = 5;
+	Array[1][2] = 6;
 
-	int a[3] = { 1,2,3 };
-	int b[3] = { 4,5,6 };
-	int c[3] = { 7,8,9 };
-	CListe<int> *L1 = new CListe<int>(3, a);
-	CListe<int> *L2 = new CListe<int>(3, b);
-	CListe<int> *L3 = new CListe<int>(3, c);
-	CListe<int> * LTab[3] = { L1, L2, L3 };
-	CListe<CListe<int> *> *L4 = new CListe<CListe<int> *>(3, LTab);
-	 std::cout << L4->LISGetElement(0)->LISGetElement(0);
+	int **Array2 = new int*[3]; // allocate an array of 2 int pointers — these are our rows
+	for (int count = 0; count < 3; ++count)
+		Array2[count] = new int[2]; // these are our columns
+
+	Array2[0][0] = 1;
+	Array2[0][1] = 2;
+	Array2[1][0] = 3;
+	Array2[1][1] = 4;
+	Array2[2][0] = 5;
+	Array2[2][1] = 6;
+
+
+	CMatrice<int> *mat = new CMatrice<int>(3,2 , Array);
+	CMatrice<int> *mat2 = new CMatrice<int>(2,3, Array2);
+	CMatrice<int> *mat3 = &mat2->operator*(*mat);
+	std::cout << mat3->MATgetElement(0, 0);
+	std::cout << "\n";
+	std::cout << mat3->MATgetElement(0, 1);
+	std::cout << "\n";
+	std::cout << mat3->MATgetElement(1, 0);
+	std::cout << "\n";
+	std::cout << mat3->MATgetElement(1, 1);
+
+
+
 
 	
 	

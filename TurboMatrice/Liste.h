@@ -52,6 +52,13 @@ CListe<T>::CListe(int iSize,T *pElement)
 			pLISArray[i] = pElement[i];
 		}
 	}
+	else
+	{
+		for (int i = 0; i < iLISsize; i++)
+		{
+			pLISArray[i] = NULL;
+		}
+	}
 
 }
 template <typename T>
