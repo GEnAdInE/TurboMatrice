@@ -41,7 +41,7 @@ template <typename T> class CMatrice
 		CMatrice<T>& operator+=(CMatrice<T>& MATmatrice);
 		CMatrice<T>& operator-=(CMatrice<T>& MATmatrice);
 		CMatrice<T>& operator*=(CMatrice<T>& MATmatrice);
-		// faire operateur [] qui retroune une collone ou un ligne a voir , faire =+ =- =* == != et =
+		
 
 		//Operateur scalaire
 		
@@ -294,4 +294,46 @@ CMatrice<T> CMatrice<T>::operator*(CMatrice<T>& MATmatrice)
 }
 
 
+template<typename T>
+bool CMatrice<T>::operator==(CMatrice<T> MATmatrice)
+{
+	if (MATsameDimension)
+	{
+	
+		int iL = MATgetNbRow();
+		int iC = MATgetNbColumn();
+		for (int i = 0; i < iL; i++)
+		{
+			for (int j = 0; j < iC; j++)
+			{
+				if (MATgetElement(i, j) != MATmatrice.MATgetElement(i, j))
+				{
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+}
 
+template<typename T>
+bool CMatrice<T>::operator!=(CMatrice<T> MATmatrice)
+{
+	if (MATsameDimension)
+	{
+
+		int iL = MATgetNbRow();
+		int iC = MATgetNbColumn();
+		for (int i = 0; i < iL; i++)
+		{
+			for (int j = 0; j < iC; j++)
+			{
+				if (MATgetElement(i, j) != MATmatrice.MATgetElement(i, j))
+				{
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+}
