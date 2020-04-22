@@ -15,7 +15,7 @@ template <typename T> class CMatrice
 		//constructor and destructor
 		CMatrice(void); //default constructor
 		CMatrice(CMatrice<T>& mat);//Copy construcor !not finished
-		CMatrice(int iL, int iC,T** ppMat); //Confort Constructor
+		CMatrice(int iC, int iL,T** ppMat); //Confort Constructor
 		~CMatrice(void);//Destructor , maybe rework on it !!
 		
 		//Methodes utile
@@ -90,7 +90,7 @@ CMatrice<T>::CMatrice(CMatrice<T>& mat)
 }
 
 template <typename T>
-CMatrice<T>::CMatrice(int iL, int iC, T** ppMat)
+CMatrice<T>::CMatrice(int iC, int iL, T** ppMat)
 {
 	iNbRow = iL;
 	iNbColumn = iC;
@@ -248,36 +248,47 @@ CMatrice<T> CMatrice<T>::operator*(CMatrice<T>& MATmatrice)
 	{
 		int iL = MATgetNbRow();
 		int iC = MATgetNbColumn();
-		int iC2 = MATmatrice.MATgetNbColumn();
+	
 
-		//pas bon il faut associer une matrice de la bonne taille
-		T** tmpArray = new T*[iC]; // allocate an array of iC int pointers — these are our rows
-		for (int count = 0; count < iC; ++count)
+		//matrice carré de la taille iC
+		T** tmpArray = new T*[iL]; // allocate an array of iC int pointers — these are our rows
+		for (int count = 0; count < iL; ++count)
 			tmpArray[count] = new T[iL]; // these are our columns
 
-		//revoir la methode de calcul car Mat3*2 * MAt2*3 marche pas bien
+		
 		for (int i = 0; i < iL; i++)
 		{
-			for (int j = 0; j < iC2; j++)
+			for (int j = 0; j < iL; j++)
 			{
 				for (int k = 0; k < iC; k++)
 				{
 					if (k == 0)
 					{
-						tmpArray[i][j] = MATgetElement(i, k) * MATmatrice.MATgetElement(k, j);
+						T var1 = MATgetElement(k, i);
+						T var2 = MATmatrice.MATgetElement(j, k);
+						tmpArray[j][i] = var1 * var2;
+						
+					
 					}
 					else
 					{
-						tmpArray[i][j] += MATgetElement(i, k) * MATmatrice.MATgetElement(k, j);
+						T var1 = MATgetElement(k, i);
+						T var2 = MATmatrice.MATgetElement(j, k);
+						tmpArray[j][i] += var1 * var2 ;
+					
 					}
 					
 
 				}
 			}
 		}
-		CMatrice<T>* MATresult = new CMatrice<T>(iL, iC, tmpArray);
+		CMatrice<T>* MATresult = new CMatrice<T>(iL, iL, tmpArray);
 		return *MATresult;
 
+	}
+	else
+	{
+		std::cout << "erreur";
 	}
 	
 }

@@ -9,9 +9,9 @@ int main()
     std::cout << "Hello World!\n";
 
 	
-	int **Array = new int*[2]; // allocate an array of 2 int pointers — these are our rows
+	int **Array = new int*[2]; // allocate an array of 2 int pointers — these are our columns
 	for (int count = 0; count < 2; ++count)
-		Array[count] = new int[3]; // these are our columns
+		Array[count] = new int[3]; // these are our rows
 
 	Array[0][0] = 1;
 	Array[0][1] = 2;
@@ -20,9 +20,9 @@ int main()
 	Array[1][1] = 5;
 	Array[1][2] = 6;
 
-	int **Array2 = new int*[3]; // allocate an array of 2 int pointers — these are our rows
+	int **Array2 = new int*[3]; // allocate an array of 2 int pointers — these are our columns
 	for (int count = 0; count < 3; ++count)
-		Array2[count] = new int[2]; // these are our columns
+		Array2[count] = new int[2]; // these are our row
 
 	Array2[0][0] = 1;
 	Array2[0][1] = 2;
@@ -32,16 +32,48 @@ int main()
 	Array2[2][1] = 6;
 
 
-	CMatrice<int> *mat = new CMatrice<int>(3,2 , Array);
-	CMatrice<int> *mat2 = new CMatrice<int>(2,3, Array2);
-	CMatrice<int> *mat3 = &mat2->operator*(*mat);
+	CMatrice<int> *mat = new CMatrice<int>(2,3 , Array);
+	std::cout << mat->MATgetElement(0, 0);
+	std::cout << " ";
+	std::cout << mat->MATgetElement(1, 0);
+	std::cout << "\n";
+	std::cout << mat->MATgetElement(0, 1);
+	std::cout << " ";
+	std::cout << mat->MATgetElement(1, 1);
+	std::cout << "\n";
+	std::cout << mat->MATgetElement(0, 2);
+	std::cout << " ";
+	std::cout << mat->MATgetElement(1, 2);
+	std::cout << "\n";
+	std::cout << "\n";
+	std::cout << "\n";
+	CMatrice<int> *mat2 = new CMatrice<int>(3,2, Array2);
+
+	std::cout << mat2->MATgetElement(0, 0);
+	std::cout << " ";
+	std::cout << mat2->MATgetElement(1, 0);
+	std::cout << " ";
+	std::cout << mat2->MATgetElement(2, 0);
+	std::cout << "\n";
+	std::cout << mat2->MATgetElement(0, 1);
+	std::cout << " ";
+	std::cout << mat2->MATgetElement(1, 1);
+	std::cout << " ";
+	std::cout << mat2->MATgetElement(2, 1);
+	std::cout << "\n";
+
+	CMatrice<int> *mat3 = &mat2->operator*(*mat2);
 	std::cout << mat3->MATgetElement(0, 0);
-	std::cout << "\n";
-	std::cout << mat3->MATgetElement(0, 1);
-	std::cout << "\n";
+	std::cout << " ";
 	std::cout << mat3->MATgetElement(1, 0);
 	std::cout << "\n";
+	std::cout << mat3->MATgetElement(0, 1);
+	std::cout << " ";
 	std::cout << mat3->MATgetElement(1, 1);
+	std::cout << "\n";
+
+
+
 
 
 
