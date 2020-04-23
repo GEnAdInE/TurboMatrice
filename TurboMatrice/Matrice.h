@@ -58,7 +58,7 @@ template <typename T> class CMatrice
 		bool operator==(CMatrice<T> MATmatrice);
 		bool operator!=(CMatrice<T> MATmatrice);
 		CMatrice<T> MATtr(void); //transposé
-		CMatrice<T> MATinv(void); //inverse
+		
 
 };
 
@@ -363,19 +363,75 @@ void CMatrice<T>::MATmodify(int i, int j, T val)
 }
 
 template<typename T>
-CMatrice<T> CMatrice<T>::MATinv(void)
+void CMatrice<T>::MATaddRow(int iPos, T * row)
 {
-	if (MATgetNbColumn() == MATgetNbRow())
-	{
+	int iL = MATgetNbRow();
+	int iC = MATgetNbColumn();
 
-	}
-	else
+
+	//matrice carré de la taille iC
+	T** tmpArray = new T*[iC]; // allocate an array of iC int pointers —
+	for (int count = 0; count < iC; ++count)
+		tmpArray[count] = new T[iL + 1];
+
+	for (int i = 0; i < iPos; i++)
 	{
-		//pas matrice carré
+		for (int j = 0; j < iC; j++)
+		{
+
+			tmpArray[j][i] = MATgetElement(j, i);
+		}
 	}
+	for (int j = 0; j < iC; j++)
+	{
+		tmpArray[j][iPos] = row[j];
+	}
+	for (int i = iPos+1; i < iL+1; i++)
+	{
+		for (int j = 0; j < iC; j++)
+		{
+
+			tmpArray[j][i] = MATgetElement(j, i-1);
+		}
+	}
+	MATsetNbRow(iL + 1);
+	ppMatrix = tmpArray;
 	
 }
 
+
+template<typename T>
+void CMatrice<T>::MATremoveRow(int iPos)
+{
+	int iL = MATgetNbRow();
+	int iC = MATgetNbColumn();
+
+
+	//matrice carré de la taille iC
+	T** tmpArray = new T*[iC]; // allocate an array of iC int pointers —
+	for (int count = 0; count < iC; ++count)
+		tmpArray[count] = new T[iL-1];
+
+	for (int i = 0; i < iPos; i++)
+	{
+		for (int j = 0; j < iC; j++)
+		{
+
+			tmpArray[j][i] = MATgetElement(j, i);
+		}
+	}
+	for (int i = iPos+1; i < iL; i++)
+	{
+		for (int j = 0; j < iC; j++)
+		{
+
+			tmpArray[j][i-1] = MATgetElement(j, i);
+		}
+	}
+	MATsetNbRow(iL - 1);
+	ppMatrix = tmpArray;
+
+}
 template<typename T>
 CMatrice<T> CMatrice<T>::MATtr(void)
 {

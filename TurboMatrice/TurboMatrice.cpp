@@ -24,12 +24,14 @@ int main()
 	for (int count = 0; count < 3; ++count)
 		Array2[count] = new int[2]; // these are our row
 
-	Array2[0][0] = 'a';
-	Array2[0][1] = 'b';
+	Array2[0][0] = 1;
+	Array2[0][1] = 2;
 	Array2[1][0] = 3;
 	Array2[1][1] = 4;
 	Array2[2][0] = 5;
 	Array2[2][1] = 6;
+
+	int test[3] = { 10,11,12 };
 
 
 	CMatrice<int> *mat = new CMatrice<int>(2,3 , Array);
@@ -48,7 +50,8 @@ int main()
 	std::cout << "\n";
 	std::cout << "\n";
 	CMatrice<int> *mat2 = new CMatrice<int>(3,2, Array2);
-
+	mat2->MATaddRow(1, test);
+	mat2->MATremoveRow(1);
 	std::cout << mat2->MATgetElement(0, 0);
 	std::cout << " ";
 	std::cout << mat2->MATgetElement(1, 0);
@@ -60,6 +63,7 @@ int main()
 	std::cout << mat2->MATgetElement(1, 1);
 	std::cout << " ";
 	std::cout << mat2->MATgetElement(2, 1);
+	std::cout << "\n";
 	std::cout << "\n";
 
 	CMatrice<int> *mat3 = &mat->MATtr();
