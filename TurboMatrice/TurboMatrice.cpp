@@ -24,8 +24,8 @@ int main()
 	for (int count = 0; count < 3; ++count)
 		Array2[count] = new int[2]; // these are our row
 
-	Array2[0][0] = 1;
-	Array2[0][1] = 2;
+	Array2[0][0] = 'a';
+	Array2[0][1] = 'b';
 	Array2[1][0] = 3;
 	Array2[1][1] = 4;
 	Array2[2][0] = 5;
@@ -62,14 +62,18 @@ int main()
 	std::cout << mat2->MATgetElement(2, 1);
 	std::cout << "\n";
 
-	CMatrice<int> *mat3 = &mat2->operator*(*mat2);
+	CMatrice<int> *mat3 = &mat->MATtr();
 	std::cout << mat3->MATgetElement(0, 0);
 	std::cout << " ";
 	std::cout << mat3->MATgetElement(1, 0);
+	std::cout << " ";
+	std::cout << mat3->MATgetElement(2, 0);
 	std::cout << "\n";
 	std::cout << mat3->MATgetElement(0, 1);
 	std::cout << " ";
 	std::cout << mat3->MATgetElement(1, 1);
+	std::cout << " ";
+	std::cout << mat3->MATgetElement(2, 1);
 	std::cout << "\n";
 
 

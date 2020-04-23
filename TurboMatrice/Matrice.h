@@ -24,6 +24,7 @@ template <typename T> class CMatrice
 		int MATgetNbRow(void);
 		int MATgetNbColumn(void);
 		T MATgetElement(int i, int j);//return an element of the matrix by knowing his position 
+		void MATmodify(int i, int j, T value);
 		void MATaddRow(int iPos,T* row);
 		void MATaddColumn(int iPos,T* Column);
 		void MATremoveRow(int iPos);
@@ -169,6 +170,10 @@ T CMatrice<T>::MATgetElement(int i, int j)
 		{
 			return ppMatrix[i][j];
 		}
+	}
+	else
+	{
+		//erreur
 	}
 
 }
@@ -336,4 +341,62 @@ bool CMatrice<T>::operator!=(CMatrice<T> MATmatrice)
 		}
 		return false;
 	}
+}
+
+template<typename T>
+void CMatrice<T>::MATmodify(int i, int j, T val)
+{
+	if (typeid(val) == typeid(ppMatrix))
+	{
+		if (i >= 0 && i < MATgetNbColumn())
+		{
+			if (j >= 0 && j < MATgetNbRow())
+			{
+				ppMatrix[i][j] = val;
+			}
+		}
+	}
+	else
+	{
+		//erreur
+	}
+}
+
+template<typename T>
+CMatrice<T> CMatrice<T>::MATinv(void)
+{
+	if (MATgetNbColumn() == MATgetNbRow())
+	{
+
+	}
+	else
+	{
+		//pas matrice carré
+	}
+	
+}
+
+template<typename T>
+CMatrice<T> CMatrice<T>::MATtr(void)
+{
+	int iL = MATgetNbRow();
+	int iC = MATgetNbColumn();
+
+
+	//matrice carré de la taille iC
+	T** tmpArray = new T*[iL]; // allocate an array of iC int pointers —
+	for (int count = 0; count < iL; ++count)
+		tmpArray[count] = new T[iC]; 
+
+	for (int i = 0; i < iL; i++)
+	{
+		for (int j = 0; j < iC; j++)
+		{
+
+			tmpArray[i][j] = MATgetElement(j, i);
+		}
+	}
+	CMatrice<T>* MATresult = new CMatrice<T>(iL, iC, tmpArray);
+	return *MATresult;
+
 }
