@@ -1,6 +1,7 @@
 #include <iostream>
+#include "Cexception.h"
 
-
+//attention fuite memoire a tout les endroit ou je fais des tmpArray
 
 template <typename T> class CMatrice 
 {
@@ -14,7 +15,7 @@ template <typename T> class CMatrice
 		
 		//constructor and destructor
 		CMatrice(void); //default constructor
-		CMatrice(CMatrice<T>& mat);//Copy construcor !not finished
+		CMatrice(const CMatrice<T>& mat);//Copy construcor !not finished
 		CMatrice(int iC, int iL,T** ppMat); //Confort Constructor
 		~CMatrice(void);//Destructor , maybe rework on it !!
 		
@@ -53,7 +54,7 @@ template <typename T> class CMatrice
 		
 
 		//Autre operation
-		CMatrice<T> operator[](int iRow);
+		T* operator[](int iIterator); //ca ou on garde preciseElement , au choix !
 		CMatrice<T>& operator=(CMatrice<T> MATmatrice);
 		bool operator==(CMatrice<T> MATmatrice);
 		bool operator!=(CMatrice<T> MATmatrice);
@@ -71,10 +72,10 @@ CMatrice<T>::CMatrice(void)
 }
 
 template <typename T>
-CMatrice<T>::CMatrice(CMatrice<T>& mat)
+CMatrice<T>::CMatrice(const CMatrice<T>& mat)
 {
-	iNbRow = mat.MATgetNbRow();
-	iNbColumn = mat.MATgetNbColumn();
+	iNbRow = mat.iNbRow;
+	iNbColumn = mat.iNbColumn;
 	ppMatrix = new T*[iNbColumn]; // allocate an array of iC int pointers — these are our columns 
 
 	for (int count = 0; count < iNbColumn; ++count)
@@ -113,13 +114,15 @@ CMatrice<T>::CMatrice(int iC, int iL, T** ppMat)
 template <typename T>
 CMatrice<T>::~CMatrice(void)
 {
-	if (ppMatrix == NULL)
-	{
-		if (iNbRow == 0 && iNbColumn == 0)
+	if (ppMatrix != NULL) {
+		for (int i = 0; i < MATgetNbColumn(); i++)
 		{
-			free(this);
-		}
+			delete[] ppMatrix[i];
+			ppMatrix[i] = NULL;
 
+		}
+		delete[] ppMatrix;
+		ppMatrix = NULL;
 	}
 }
 
@@ -212,8 +215,8 @@ CMatrice<T> CMatrice<T>::operator+(CMatrice<T>& MATmatrice)
 				tmpArray[i][j] = MATgetElement(i, j) + MATmatrice.MATgetElement(i, j);
 			}
 		}
-		CMatrice<T>* MATresult = new CMatrice<T>(iL, iC, tmpArray);
-		return *MATresult;
+		CMatrice<T> MATresult(iC, iL, tmpArray);
+		return MATresult;
 
 	}
 	
@@ -239,8 +242,8 @@ CMatrice<T> CMatrice<T>::operator-(CMatrice<T>& MATmatrice)
 				tmpArray[i][j] = MATgetElement(i, j) - MATmatrice.MATgetElement(i, j);
 			}
 		}
-		CMatrice<T>* MATresult = new CMatrice<T>(iL, iC, tmpArray);
-		return *MATresult;
+		CMatrice<T> MATresult(iC, iL, tmpArray);
+		return MATresult;
 
 	}
 	
@@ -287,8 +290,8 @@ CMatrice<T> CMatrice<T>::operator*(CMatrice<T>& MATmatrice)
 				}
 			}
 		}
-		CMatrice<T>* MATresult = new CMatrice<T>(iL, iL, tmpArray);
-		return *MATresult;
+		CMatrice<T> MATresult(iL, iL, tmpArray);
+		return MATresult;
 
 	}
 	else
@@ -297,7 +300,6 @@ CMatrice<T> CMatrice<T>::operator*(CMatrice<T>& MATmatrice)
 	}
 	
 }
-
 
 template<typename T>
 bool CMatrice<T>::operator==(CMatrice<T> MATmatrice)
@@ -399,6 +401,43 @@ void CMatrice<T>::MATaddRow(int iPos, T * row)
 	
 }
 
+template<typename T>
+void CMatrice<T>::MATaddColumn(int iPos, T * Column)
+{
+
+	int iL = MATgetNbRow();
+	int iC = MATgetNbColumn();
+
+
+	//matrice carré de la taille iC
+	T** tmpArray = new T*[iC+1]; // allocate an array of iC int pointers —
+	for (int count = 0; count < iC+1; ++count)
+		tmpArray[count] = new T[iL];
+
+	for (int i = 0; i < iL; i++)
+	{
+		for (int j = 0; j < iPos; j++)
+		{
+
+			tmpArray[j][i] = MATgetElement(j, i);
+		}
+	}
+	for (int j = 0; j < iL; j++)
+	{
+		tmpArray[iPos][j] = Column[j];
+	}
+	for (int i = 0; i < iL; i++)
+	{
+		for (int j = iPos+1; j < iC+1; j++)
+		{
+
+			tmpArray[j][i] = MATgetElement(j, i - 1);
+		}
+	}
+	MATsetNbColumn(iC+1);
+	ppMatrix = tmpArray;
+
+}
 
 template<typename T>
 void CMatrice<T>::MATremoveRow(int iPos)
@@ -432,6 +471,40 @@ void CMatrice<T>::MATremoveRow(int iPos)
 	ppMatrix = tmpArray;
 
 }
+
+template<typename T>
+void CMatrice<T>::MATremoveColumn(int iPos)
+{
+	int iL = MATgetNbRow();
+	int iC = MATgetNbColumn();
+
+
+	//matrice carré de la taille iC
+	T** tmpArray = new T*[iC-1]; // allocate an array of iC int pointers —
+	for (int count = 0; count < iC-1; ++count)
+		tmpArray[count] = new T[iL];
+
+	for (int i = 0; i < iL; i++)
+	{
+		for (int j = 0; j < iPos; j++)
+		{
+
+			tmpArray[j][i] = MATgetElement(j, i);
+		}
+	}
+	for (int i = 0; i < iL; i++)
+	{
+		for (int j = iPos+1; j < iC; j++)
+		{
+
+			tmpArray[j-1][i] = MATgetElement(j, i);
+		}
+	}
+	MATsetNbColumn(iC - 1);
+	ppMatrix = tmpArray;
+
+}
+
 template<typename T>
 CMatrice<T> CMatrice<T>::MATtr(void)
 {
@@ -455,4 +528,79 @@ CMatrice<T> CMatrice<T>::MATtr(void)
 	CMatrice<T>* MATresult = new CMatrice<T>(iL, iC, tmpArray);
 	return *MATresult;
 
+}
+
+template<typename T>
+T* CMatrice<T>::operator[](int iIterator)
+{
+	return ppMatrix[iIterator];
+}
+
+template<typename T>
+CMatrice<T>& CMatrice<T>::operator=(CMatrice<T> MATmatrice)
+{
+	int iC = MATmatrice.MATgetNbColumn();
+	int iL = MATmatrice.MATgetNbRow();
+	MATsetNbRow(iL);
+	MATsetNbColumn(iC);
+	
+	ppMatrix = new T*[iC]; // allocate an array of iC int pointers — these are our columns 
+
+	for (int count = 0; count < iC; ++count)
+		ppMatrix[count] = new T[iL]; // these are our rows
+
+	for (int i = 0; i < iC; i++)
+	{
+		for (int j = 0; j < iL; j++)
+		{
+			ppMatrix[i][j] = MATmatrice.MATgetElement(i,j);
+		}
+	}
+	return *this;
+	
+}
+
+template<typename T>
+CMatrice<T> CMatrice<T>::operator*(T c)
+{
+	int iL = MATgetNbRow();
+	int iC = MATgetNbColumn();
+
+	T** tmpArray = new T*[iC]; // allocate an array of iC int pointers — these are our rows
+	for (int count = 0; count < iC; ++count)
+		tmpArray[count] = new T[iL]; // these are our columns
+
+	for (int i = 0; i < iC; i++)
+	{
+		for (int j = 0; j < iL; j++)
+		{
+
+			tmpArray[i][j] = MATgetElement(i, j)*c;
+		}
+	}
+	CMatrice<T> MATresult(iC, iL, tmpArray);
+	return MATresult;
+	
+}
+
+template<typename T>
+CMatrice<T> CMatrice<T>::operator/(T c)
+{
+	int iL = MATgetNbRow();
+	int iC = MATgetNbColumn();
+
+	T** tmpArray = new T*[iC]; // allocate an array of iC int pointers — these are our rows
+	for (int count = 0; count < iC; ++count)
+		tmpArray[count] = new T[iL]; // these are our columns
+
+	for (int i = 0; i < iC; i++)
+	{
+		for (int j = 0; j < iL; j++)
+		{
+
+			tmpArray[i][j] = MATgetElement(i, j)/c;
+		}
+	}
+	CMatrice<T> MATresult(iC, iL, tmpArray);
+	return MATresult;
 }

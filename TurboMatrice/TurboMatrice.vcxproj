@@ -151,9 +151,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Cexception.cpp" />
     <ClCompile Include="TurboMatrice.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Cexception.h" />
     <ClInclude Include="Liste.h" />
     <ClInclude Include="Matrice.h" />
   </ItemGroup>

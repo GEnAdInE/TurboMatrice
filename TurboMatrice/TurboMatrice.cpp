@@ -34,54 +34,70 @@ int main()
 	int test[3] = { 10,11,12 };
 
 
-	CMatrice<int> *mat = new CMatrice<int>(2,3 , Array);
-	std::cout << mat->MATgetElement(0, 0);
+	CMatrice<int> mat(2,3 , Array);
+	mat.MATaddColumn(2, test);
+	mat.MATremoveColumn(0);
+	std::cout << mat.MATgetElement(0, 0);
 	std::cout << " ";
-	std::cout << mat->MATgetElement(1, 0);
+	std::cout << mat.MATgetElement(1, 0);
+	std::cout << " ";
+	std::cout << mat.MATgetElement(2, 0);
 	std::cout << "\n";
-	std::cout << mat->MATgetElement(0, 1);
+	std::cout << mat.MATgetElement(0, 1);
 	std::cout << " ";
-	std::cout << mat->MATgetElement(1, 1);
+	std::cout << mat.MATgetElement(1, 1);
+	std::cout << " ";
+	std::cout << mat.MATgetElement(2, 1);
 	std::cout << "\n";
-	std::cout << mat->MATgetElement(0, 2);
+	std::cout << mat.MATgetElement(0, 2);
 	std::cout << " ";
-	std::cout << mat->MATgetElement(1, 2);
-	std::cout << "\n";
-	std::cout << "\n";
-	std::cout << "\n";
-	CMatrice<int> *mat2 = new CMatrice<int>(3,2, Array2);
-	mat2->MATaddRow(1, test);
-	mat2->MATremoveRow(1);
-	std::cout << mat2->MATgetElement(0, 0);
+	std::cout << mat.MATgetElement(1, 2);
 	std::cout << " ";
-	std::cout << mat2->MATgetElement(1, 0);
-	std::cout << " ";
-	std::cout << mat2->MATgetElement(2, 0);
-	std::cout << "\n";
-	std::cout << mat2->MATgetElement(0, 1);
-	std::cout << " ";
-	std::cout << mat2->MATgetElement(1, 1);
-	std::cout << " ";
-	std::cout << mat2->MATgetElement(2, 1);
+	std::cout << mat.MATgetElement(2, 2);
 	std::cout << "\n";
 	std::cout << "\n";
-
-	CMatrice<int> *mat3 = &mat->MATtr();
-	std::cout << mat3->MATgetElement(0, 0);
-	std::cout << " ";
-	std::cout << mat3->MATgetElement(1, 0);
-	std::cout << " ";
-	std::cout << mat3->MATgetElement(2, 0);
 	std::cout << "\n";
-	std::cout << mat3->MATgetElement(0, 1);
+	CMatrice<int> mat2(3,2, Array2);
+	mat2.MATaddRow(1, test);
+	mat2.MATremoveRow(1);
+	std::cout << mat2.MATgetElement(0, 0);
 	std::cout << " ";
-	std::cout << mat3->MATgetElement(1, 1);
+	std::cout << mat2.MATgetElement(1, 0);
 	std::cout << " ";
-	std::cout << mat3->MATgetElement(2, 1);
+	std::cout << mat2.MATgetElement(2, 0);
 	std::cout << "\n";
-
+	std::cout << mat2.MATgetElement(0, 1);
+	std::cout << " ";
+	std::cout << mat2.MATgetElement(1, 1);
+	std::cout << " ";
+	std::cout << mat2.MATgetElement(2, 1);
+	std::cout << "\n";
+	std::cout << "\n";
 
 	
+	CMatrice<int> mat3;
+	mat3 = mat2 + mat2;
+	mat3 = mat3 * 2;
+	mat3 = mat3 / 2;
+	std::cout << mat3.MATgetElement(0, 0);
+	std::cout << " ";
+	std::cout << mat3.MATgetElement(1, 0);
+	std::cout << " ";
+	std::cout << mat3.MATgetElement(2, 0);
+	std::cout << "\n";
+	std::cout << mat3.MATgetElement(0, 1);
+	std::cout << " ";
+	std::cout << mat3.MATgetElement(1, 1);
+	std::cout << " ";
+	std::cout << mat3.MATgetElement(2, 1);
+	std::cout << mat3[2][1];
+	
+
+	mat.~CMatrice();
+	mat2.~CMatrice();
+	mat3.~CMatrice();
+
+	return 0;
 }
 
 // Exécuter le programme : Ctrl+F5 ou menu Déboguer > Exécuter sans débogage
