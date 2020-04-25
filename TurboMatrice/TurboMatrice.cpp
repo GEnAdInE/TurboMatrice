@@ -2,41 +2,22 @@
 //
 
 #include <iostream>
-#include "Matrice.h"
+#include "CMatrice.h"
+
 
 int main()
 {
     std::cout << "Hello World!\n";
 
 	
-	int **Array = new int*[2]; // allocate an array of 2 int pointers — these are our columns
-	for (int count = 0; count < 2; ++count)
-		Array[count] = new int[3]; // these are our rows
+	CVector<CVector<int>*> pVector; // allocate an array of iC int pointers — these are our columns 
 
-	Array[0][0] = 1;
-	Array[0][1] = 2;
-	Array[0][2] = 3;
-    Array[1][0] = 4;
-	Array[1][1] = 5;
-	Array[1][2] = 6;
+	
+	pVector.push(new CVector<int>{1,2});
+	pVector.push(new CVector<int>{ 3,4 });
+	pVector.push(new CVector<int>{ 5,6 });
 
-	int **Array2 = new int*[3]; // allocate an array of 2 int pointers — these are our columns
-	for (int count = 0; count < 3; ++count)
-		Array2[count] = new int[2]; // these are our row
-
-	Array2[0][0] = 1;
-	Array2[0][1] = 2;
-	Array2[1][0] = 3;
-	Array2[1][1] = 4;
-	Array2[2][0] = 5;
-	Array2[2][1] = 6;
-
-	int test[3] = { 10,11,12 };
-
-
-	CMatrice<int> mat(2,3 , Array);
-	mat.MATaddColumn(2, test);
-	mat.MATremoveColumn(0);
+	CMatrice<int> mat(3, 2, pVector);
 	std::cout << mat.MATgetElement(0, 0);
 	std::cout << " ";
 	std::cout << mat.MATgetElement(1, 0);
@@ -48,54 +29,108 @@ int main()
 	std::cout << mat.MATgetElement(1, 1);
 	std::cout << " ";
 	std::cout << mat.MATgetElement(2, 1);
+	std::cout << " ";
 	std::cout << "\n";
-	std::cout << mat.MATgetElement(0, 2);
+
+
+	CVector<CVector<int>*> pVector1; // allocate an array of iC int pointers — these are our columns 
+
+
+	pVector1.push(new CVector<int>{ 1,2,3 });;
+	pVector1.push(new CVector<int>{ 4,5,6 });
+	CMatrice<int> mat4(2, 3, pVector1);
+
+
+	CMatrice<int> mat0 = mat * mat4;
+	std::cout << mat0.MATgetElement(0, 0);
 	std::cout << " ";
-	std::cout << mat.MATgetElement(1, 2);
+	std::cout << mat0.MATgetElement(1, 0);
+	std::cout << "\n";
+	std::cout << mat0.MATgetElement(0, 1);
 	std::cout << " ";
-	std::cout << mat.MATgetElement(2, 2);
+	std::cout << mat0.MATgetElement(1, 1);
+	std::cout << "\n";
+
+
+	CMatrice<int> mat1(mat);
+	
+	mat1.MATaddRow(1, { 10,10 });
+	
+	//mat1 = (mat1+mat1); ne marche pas ??
+	std::cout << mat1.MATgetElement(0, 0);
+	std::cout << " ";
+	std::cout << mat1.MATgetElement(1, 0);
+	std::cout << " ";
+	std::cout << mat1.MATgetElement(2, 0);
+	std::cout << "\n";
+	std::cout << mat1.MATgetElement(0, 1);
+	std::cout << " ";
+	std::cout << mat1.MATgetElement(1, 1);
+	std::cout << " ";
+	std::cout << mat1.MATgetElement(2, 1);
+	std::cout << "\n";
+	std::cout << mat1.MATgetElement(0, 2);
+	std::cout << " ";
+	std::cout << mat1.MATgetElement(1, 2);
+	std::cout << " ";
+	std::cout << mat1.MATgetElement(2, 2);
+	std::cout << "\n";
+	mat1.MATaddColumn(0, { 6,6,6 });
+	std::cout << mat1.MATgetElement(0, 0);
+	std::cout << " ";
+	std::cout << mat1.MATgetElement(1, 0);
+	std::cout << " ";
+	std::cout << mat1.MATgetElement(2, 0);
+	std::cout << "\n";
+	std::cout << mat1.MATgetElement(0, 1);
+	std::cout << " ";
+	std::cout << mat1.MATgetElement(1, 1);
+	std::cout << " ";
+	std::cout << mat1.MATgetElement(2, 1);
+	std::cout << "\n";
+	std::cout << mat1.MATgetElement(0, 2);
+	std::cout << " ";
+	std::cout << mat1.MATgetElement(1, 2);
+	std::cout << " ";
+	std::cout << mat1.MATgetElement(2, 2);
+	std::cout << "\n";
+	mat1.MATremoveColumn(0);
+	mat1.MATremoveRow(1);
+	std::cout << mat1.MATgetElement(0, 0);
+	std::cout << " ";
+	std::cout << mat1.MATgetElement(1, 0);
+	std::cout << "\n";
+	std::cout << mat1.MATgetElement(0, 1);
+	std::cout << " ";
+	std::cout << mat1.MATgetElement(1, 1);
+	std::cout << "\n";
+	
 	std::cout << "\n";
 	std::cout << "\n";
-	std::cout << "\n";
-	CMatrice<int> mat2(3,2, Array2);
-	mat2.MATaddRow(1, test);
-	mat2.MATremoveRow(1);
-	std::cout << mat2.MATgetElement(0, 0);
-	std::cout << " ";
-	std::cout << mat2.MATgetElement(1, 0);
-	std::cout << " ";
-	std::cout << mat2.MATgetElement(2, 0);
-	std::cout << "\n";
-	std::cout << mat2.MATgetElement(0, 1);
-	std::cout << " ";
-	std::cout << mat2.MATgetElement(1, 1);
-	std::cout << " ";
-	std::cout << mat2.MATgetElement(2, 1);
 	std::cout << "\n";
 	std::cout << "\n";
 
-	
-	CMatrice<int> mat3;
-	mat3 = mat2 + mat2;
-	mat3 = mat3 * 2;
-	mat3 = mat3 / 2;
-	std::cout << mat3.MATgetElement(0, 0);
+	mat1 = (mat + mat1);
+	std::cout << mat1.MATgetElement(0, 0);
 	std::cout << " ";
-	std::cout << mat3.MATgetElement(1, 0);
-	std::cout << " ";
-	std::cout << mat3.MATgetElement(2, 0);
+	std::cout << mat1.MATgetElement(1, 0);
 	std::cout << "\n";
-	std::cout << mat3.MATgetElement(0, 1);
+	std::cout << mat1.MATgetElement(0, 1);
 	std::cout << " ";
-	std::cout << mat3.MATgetElement(1, 1);
+	std::cout << mat1.MATgetElement(1, 1);
+	std::cout << "\n";
+	mat1 = mat1 / 2;
+	std::cout << mat1.MATgetElement(0, 0);
 	std::cout << " ";
-	std::cout << mat3.MATgetElement(2, 1);
-	std::cout << mat3[2][1];
-	
+	std::cout << mat1.MATgetElement(1, 0);
+	std::cout << "\n";
+	std::cout << mat1.MATgetElement(0, 1);
+	std::cout << " ";
+	std::cout << mat1.MATgetElement(1, 1);
+	std::cout << "\n";
 
-	mat.~CMatrice();
-	mat2.~CMatrice();
-	mat3.~CMatrice();
+
+
 
 	return 0;
 }

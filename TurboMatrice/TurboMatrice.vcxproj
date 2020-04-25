@@ -156,8 +156,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Cexception.h" />
-    <ClInclude Include="Liste.h" />
-    <ClInclude Include="Matrice.h" />
+    <ClInclude Include="CVector.h" />
+    <ClInclude Include="CListe.h" />
+    <ClInclude Include="CMatrice.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
