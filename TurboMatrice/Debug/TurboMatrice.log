@@ -1,6 +1,2 @@
 ﻿  TurboMatrice.cpp
-c:\users\onero\documents\3a\turbomatrice\turbomatrice\cmatrice.h(184): warning C4715: 'CMatrice<int>::MATgetElement' : les chemins de contrôle ne retournent pas tous une valeur
-c:\users\onero\documents\3a\turbomatrice\turbomatrice\cmatrice.h(303): warning C4715: 'CMatrice<int>::operator*' : les chemins de contrôle ne retournent pas tous une valeur
-c:\users\onero\documents\3a\turbomatrice\turbomatrice\cmatrice.h(227): warning C4715: 'CMatrice<int>::operator+' : les chemins de contrôle ne retournent pas tous une valeur
-c:\users\onero\documents\3a\turbomatrice\turbomatrice\cmatrice.h(198): warning C4715: 'CMatrice<int>::MATsameDimension' : les chemins de contrôle ne retournent pas tous une valeur
   TurboMatrice.vcxproj -> C:\Users\onero\Documents\3A\TurboMatrice\Debug\TurboMatrice.exe

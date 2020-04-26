@@ -12,7 +12,7 @@ public:
 	//constructors
 	CVector();
 	CVector(initializer_list<T> ArrayParam);
-	CVector(const CVector& VECParam); 
+	CVector(const CVector& VECParam);
 
 	//mutators
 	void push(T value);
@@ -23,13 +23,12 @@ public:
 	size_t size() const;
 	T begin() const;
 	T end() const;
-	T find(T element);
+	T find(T element) const;
 	T getElement(unsigned int index) const;
 	T *getVectorElements() const;
 
-	//other
+	//operators
 	bool operator!=(CVector<T> Vect);
-
 
 	//misc
 	void print();
@@ -43,7 +42,7 @@ private:
 	T *pValueList;
 
 	//misc
-	bool pointerValueEqual(T element1, T element2);
+	bool pointerValueEqual(const T element1, const T element2) const;
 
 };
 
@@ -92,10 +91,6 @@ CVector<T>::CVector(const CVector<T>& VECParam) {
 	}
 }
 
-
-
-
-
 /**
  *  @brief  Push an element inside the vector.
  *  @param  value	New element to push.
@@ -110,7 +105,7 @@ void CVector<T>::push(T value) {
 	}
 	newValueList[newValueListIterator] = value;
 	VECiCapacity++;
-	if(pValueList != NULL)
+	if (pValueList != NULL)
 		delete[] pValueList;
 	pValueList = newValueList;
 }
@@ -198,7 +193,7 @@ T CVector<T>::end() const {
  *	@example const char* myWord = myVector.find("Hello");
  */
 template<class T>
-T CVector<T>::find(T element) {
+T CVector<T>::find(T element) const {
 	unsigned int valueListIterator = 0;
 	for (valueListIterator; valueListIterator < VECiCapacity; valueListIterator++) {
 		if (pointerValueEqual(pValueList[valueListIterator], element)) {
@@ -238,19 +233,21 @@ T *CVector<T>::getVectorElements() const {
 	return pValueList;
 }
 
+/**
+ *  @brief  Overcharge of != operator
+ *	@param	Vector	Vector to compare to
+ *	@example myVector1 != myVector2
+ */
 template<class T>
-inline bool CVector<T>::operator!=(CVector<T> Vect)
+bool CVector<T>::operator!=(CVector<T> Vect)
 {
-	if (size()==Vect.size())
+	if (size() == Vect.size())
 	{
-		for (int i = 0; i < size(); i++)
-		{
-			if (getElement(i) != Vect.getElement(i))
-			{
-				return true;
-			}
+		unsigned int valueListIterator = 0;
+		for (valueListIterator; valueListIterator < size(); valueListIterator++) {
+			if (getElement(valueListIterator) != Vect.getElement(valueListIterator)) return true;
 		}
-		
+
 	}
 	return false;
 }
@@ -272,8 +269,8 @@ void CVector<T>::print() {
  */
 template<class T>
 CVector<T>::~CVector() {
-	
-		delete[] pValueList;
+
+	delete[] pValueList;
 }
 
 /**
@@ -283,7 +280,7 @@ CVector<T>::~CVector() {
  *	@example pointerValueEqual(element1, element2);
  */
 template<class T>
-bool CVector<T>::pointerValueEqual(T element1, T element2) {
+bool CVector<T>::pointerValueEqual(T element1, T element2) const {
 	while (*element1) {
 		if (*element1 != *element2) {
 			return false;
@@ -293,7 +290,4 @@ bool CVector<T>::pointerValueEqual(T element1, T element2) {
 	}
 	return true;
 }
-
-
-
 
