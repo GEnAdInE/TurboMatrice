@@ -3,7 +3,7 @@
 
 //attention fuite memoire a tout les endroit ou je fais des VECpVECtmpArray
 
-template <typename T> class CMatrice  : private CVector<T>
+template <class T> class CMatrice  : private CVector<T>
 {
 	private:
 		
@@ -66,7 +66,7 @@ template <typename T> class CMatrice  : private CVector<T>
 
 };
 
-template <typename T>
+template <class T>
 CMatrice<T>::CMatrice(void)
 {
 	iNbRow = 0;
@@ -74,7 +74,7 @@ CMatrice<T>::CMatrice(void)
 	
 }
 
-template <typename T>
+template <class T>
 CMatrice<T>::CMatrice(const CMatrice<T>& mat)
 {
 
@@ -99,7 +99,7 @@ CMatrice<T>::CMatrice(const CMatrice<T>& mat)
 	
 }
 
-template <typename T>
+template <class T>
 CMatrice<T>::CMatrice(int iIteratorColumn, int iTeratorRow, CVector<CVector<T>*> pMat)
 {
 	try
@@ -128,7 +128,7 @@ CMatrice<T>::CMatrice(int iIteratorColumn, int iTeratorRow, CVector<CVector<T>*>
 
 }
 
-template <typename T>
+template <class T>
 CMatrice<T>::~CMatrice(void)
 {
 	if (VECpVECmatrix.getVectorElements() != NULL) {
@@ -146,7 +146,7 @@ CMatrice<T>::~CMatrice(void)
 	
 }
 
-template <typename T>
+template <class T>
 inline void CMatrice<T>::MATsetNbRow(int iTeratorRow)
 {
 
@@ -166,7 +166,7 @@ inline void CMatrice<T>::MATsetNbRow(int iTeratorRow)
 	
 }
 
-template <typename T>
+template <class T>
 inline void CMatrice<T>::MATsetNbColumn(int iIteratorColumn)
 {
 	try
@@ -182,19 +182,19 @@ inline void CMatrice<T>::MATsetNbColumn(int iIteratorColumn)
 
 }
 
-template <typename T>
+template <class T>
 inline int CMatrice<T>::MATgetNbRow(void)
 {
 	return iNbRow;
 }
 
-template <typename T>
+template <class T>
 inline int CMatrice<T>::MATgetNbColumn(void)
 {
 	return iNbColumn;
 }
 
-template <typename T>
+template <class T>
 inline T CMatrice<T>::MATgetElement(int iIteratorColumn, int iTeratorRow)
 {
 
@@ -213,7 +213,7 @@ inline T CMatrice<T>::MATgetElement(int iIteratorColumn, int iTeratorRow)
 
 }
 
-template<typename T>
+template<class T>
 inline bool CMatrice<T>::MATsameDimension(CMatrice<T> &mat)
 {
 	if (MATgetNbColumn() == mat.MATgetNbColumn())
@@ -227,7 +227,7 @@ inline bool CMatrice<T>::MATsameDimension(CMatrice<T> &mat)
 		return false;
 }
 
-template<typename T>
+template<class T>
 CMatrice<T> CMatrice<T>::operator+(CMatrice<T>& MATmatrice)
 {
 	try
@@ -263,7 +263,7 @@ CMatrice<T> CMatrice<T>::operator+(CMatrice<T>& MATmatrice)
 	
 }
 
-template<typename T>
+template<class T>
 CMatrice<T> CMatrice<T>::operator-(CMatrice<T>& MATmatrice)
 {
 	try
@@ -297,7 +297,7 @@ CMatrice<T> CMatrice<T>::operator-(CMatrice<T>& MATmatrice)
 	
 }
 
-template<typename T>
+template<class T>
 CMatrice<T> CMatrice<T>::operator*(CMatrice<T>& MATmatrice)
 {
 
@@ -353,14 +353,14 @@ CMatrice<T> CMatrice<T>::operator*(CMatrice<T>& MATmatrice)
 	
 }
 
-template<typename T>
+template<class T>
 CMatrice<T>& CMatrice<T>::operator+=(CMatrice<T>& MATmatrice)
 {
 	return *this;
 	//return *(this + *MATmatrice);
 }
 
-template<typename T>
+template<class T>
 bool CMatrice<T>::operator==(CMatrice<T> MATmatrice)
 {
 	if (MATsameDimension)
@@ -381,7 +381,7 @@ bool CMatrice<T>::operator==(CMatrice<T> MATmatrice)
 	return false;
 }
 
-template<typename T>
+template<class T>
 bool CMatrice<T>::operator!=(CMatrice<T> MATmatrice)
 {
 	if (MATsameDimension)
@@ -402,7 +402,7 @@ bool CMatrice<T>::operator!=(CMatrice<T> MATmatrice)
 	return true;
 }
 
-template<typename T>
+template<class T>
 void CMatrice<T>::MATmodify(int iIteratorColumn, int iTeratorRow, T val)
 {
 	try
@@ -420,7 +420,7 @@ void CMatrice<T>::MATmodify(int iIteratorColumn, int iTeratorRow, T val)
 	VECpVECmatrix.getElement(iIteratorColumn)->modify(val, iTeratorRow);
 }
 
-template<typename T>
+template<class T>
 void CMatrice<T>::MATaddRow(int iPos, CVector<T> row)
 {
 	try
@@ -467,7 +467,7 @@ void CMatrice<T>::MATaddRow(int iPos, CVector<T> row)
 	
 }
 
-template<typename T>
+template<class T>
 void CMatrice<T>::MATaddColumn(int iPos, CVector<T> Column)
 {
 
@@ -512,7 +512,7 @@ void CMatrice<T>::MATaddColumn(int iPos, CVector<T> Column)
 
 }
 
-template<typename T>
+template<class T>
 void CMatrice<T>::MATremoveRow(int iPos)
 {
 	try
@@ -552,7 +552,7 @@ void CMatrice<T>::MATremoveRow(int iPos)
 
 }
 
-template<typename T>
+template<class T>
 void CMatrice<T>::MATremoveColumn(int iPos)
 {
 
@@ -594,7 +594,7 @@ void CMatrice<T>::MATremoveColumn(int iPos)
 
 }
 
-template<typename T>
+template<class T>
 CMatrice<T> CMatrice<T>::MATtr(void)
 {
 	CVector<CVector<T>*> VECpVECtmpArray;
@@ -618,7 +618,7 @@ CMatrice<T> CMatrice<T>::MATtr(void)
 
 
 
-template<typename T>
+template<class T>
 CMatrice<T>& CMatrice<T>::operator=(CMatrice<T> MATmatrice)
 {
 
@@ -636,7 +636,7 @@ CMatrice<T>& CMatrice<T>::operator=(CMatrice<T> MATmatrice)
 	
 	
 	for (int iCount = 0; iCount < MATmatrice.MATgetNbColumn(); ++iCount)
-		VECpVECmatrix.push(new CVector<int>);
+		VECpVECmatrix.push(new CVector<T>);
 
 	MATsetNbColumn(MATmatrice.MATgetNbColumn());
 	MATsetNbRow(MATmatrice.MATgetNbRow());
@@ -655,7 +655,7 @@ CMatrice<T>& CMatrice<T>::operator=(CMatrice<T> MATmatrice)
 	
 }
 
-template<typename T>
+template<class T>
 CMatrice<T> CMatrice<T>::operator*(T c)
 {
 
@@ -678,7 +678,7 @@ CMatrice<T> CMatrice<T>::operator*(T c)
 	
 }
 
-template<typename T>
+template<class T>
 CMatrice<T> CMatrice<T>::operator/(T c)
 {
 	try

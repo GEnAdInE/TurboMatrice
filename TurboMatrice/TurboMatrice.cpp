@@ -10,12 +10,12 @@ int main()
     std::cout << "Hello World!\n";
 
 	
-	CVector<CVector<int>*> pVector; // allocate an array of iC int pointers — these are our columns 
+	CVector<CVector<double>*> pVector; // allocate an array of iC int pointers — these are our columns 
 
 	
-	pVector.push(new CVector<int>{1,2});
-	pVector.push(new CVector<int>{ 3,4 });
-	pVector.push(new CVector<int>{ 5,6 });
+	pVector.push(new CVector<double>{1,2});
+	pVector.push(new CVector<double>{ 3,4 });
+	pVector.push(new CVector<double>{ 5,6 });
 
 	
 
@@ -23,7 +23,7 @@ int main()
 	
 	
 	
-	CMatrice<int> mat(3, 2, pVector);
+	CMatrice<double> mat(3, 2, pVector);
 	std::cout << mat.MATgetElement(0, 0);
 	std::cout << " ";
 	std::cout << mat.MATgetElement(1, 0);
@@ -40,15 +40,15 @@ int main()
 	std::cout << "\n";
 	
 	
-	CVector<CVector<int>*> pVector1; // allocate an array of iC int pointers — these are our columns 
+	CVector<CVector<double>*> pVector1; // allocate an array of iC double pointers — these are our columns 
 
 
-	pVector1.push(new CVector<int>{ 1,2,3 });;
-	pVector1.push(new CVector<int>{ 4,5,6 });
-	CMatrice<int> mat4(2, 3, pVector1);
+	pVector1.push(new CVector<double>{ 1,2,3 });;
+	pVector1.push(new CVector<double>{ 4,5,6 });
+	CMatrice<double> mat4(2, 3, pVector1);
 
 
-	CMatrice<int> mat0 = mat * mat4;
+	CMatrice<double> mat0 = mat * mat4;
 	std::cout << mat0.MATgetElement(0, 0);
 	std::cout << " ";
 	std::cout << mat0.MATgetElement(1, 0);
@@ -59,7 +59,7 @@ int main()
 	std::cout << "\n";
 
 	
-	CMatrice<int> mat1(mat);
+	CMatrice<double> mat1(mat);
 	
 	mat1.MATaddRow(2, { 10,10,10 });
 	
