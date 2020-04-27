@@ -153,7 +153,7 @@ int main()
 	std::cout << "\n";
 	std::cout << "\n";
 
-	mat1 += mat;
+	//mat1 += mat;
 	std::cout << mat1.MATgetElement(0, 0);
 	std::cout << " ";
 	std::cout << mat1.MATgetElement(1, 0);
@@ -162,7 +162,7 @@ int main()
 	std::cout << " ";
 	std::cout << mat1.MATgetElement(1, 1);
 	std::cout << "\n";
-	mat1 = mat1 / 2;
+	mat1 = mat1 * 2;
 	mat1.MATmodify(0, 0, 69);
 	std::cout << mat1.MATgetElement(0, 0);
 	std::cout << " ";

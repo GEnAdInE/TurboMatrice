@@ -34,6 +34,7 @@ public:
 	void print();
 
 	//destructor
+	
 	~CVector();
 
 private:
@@ -223,6 +224,7 @@ T CVector<T>::getElement(unsigned int index) const {
 
 	return pValueList[index];
 }
+
 
 /**
  *  @brief  Return the whole vector as an Array.
