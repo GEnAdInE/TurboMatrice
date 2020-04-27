@@ -153,16 +153,16 @@ int main()
 	std::cout << "\n";
 	std::cout << "\n";
 
-	//mat1 += mat;
-	std::cout << mat1.MATgetElement(0, 0);
+	mat += mat;
+	std::cout << mat.MATgetElement(0, 0);
 	std::cout << " ";
-	std::cout << mat1.MATgetElement(1, 0);
+	std::cout << mat.MATgetElement(1, 0);
 	std::cout << "\n";
-	std::cout << mat1.MATgetElement(0, 1);
+	std::cout << mat.MATgetElement(0, 1);
 	std::cout << " ";
-	std::cout << mat1.MATgetElement(1, 1);
+	std::cout << mat.MATgetElement(1, 1);
 	std::cout << "\n";
-	mat1 = mat1 * 2;
+	mat1 *= 2;
 	mat1.MATmodify(0, 0, 69);
 	std::cout << mat1.MATgetElement(0, 0);
 	std::cout << " ";

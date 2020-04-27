@@ -52,8 +52,8 @@ template <class T> class CMatrice  : private CVector<T>
 		
 		CMatrice<T> operator*(T c);
 		CMatrice<T> operator/(T c);
-		CMatrice<T> operator*=(T& c);
-		CMatrice<T> operator/=(T& c);
+		CMatrice<T>& operator*=(T c);
+		CMatrice<T>& operator/=(T c);
 		
 
 		//Autre operation
@@ -215,8 +215,7 @@ inline bool CMatrice<T>::MATsameDimension(CMatrice<T> &mat)
 			return true;
 		}
 	}
-	else
-		return false;
+	return false;
 }
 
 template<class T>
@@ -346,11 +345,39 @@ CMatrice<T> CMatrice<T>::operator*(CMatrice<T>& MATmatrice)
 }
 
 template<class T>
-CMatrice<T>& CMatrice<T>::operator+=(CMatrice<T>& MATmatrice)
+inline CMatrice<T>& CMatrice<T>::operator+=(CMatrice<T>& MATmatrice)
 {
+	*this = this->operator+(MATmatrice);
 	return *this;
-	//return *(this + *MATmatrice);
 }
+
+template<class T>
+inline CMatrice<T>& CMatrice<T>::operator-=(CMatrice<T>& MATmatrice)
+{
+	*this = this->operator-(MATmatrice);
+	return *this;
+}
+
+template<class T>
+inline CMatrice<T>& CMatrice<T>::operator*=(CMatrice<T>& MATmatrice)
+{
+	*this = this->operator*(MATmatrice);
+	return *this;
+}
+
+template<class T>
+inline CMatrice<T>& CMatrice<T>::operator*=(T c)
+{
+	*this = this->operator*(c);
+	return *this;
+}
+template<class T>
+inline CMatrice<T>& CMatrice<T>::operator/=(T c)
+{
+	*this = this->operator/(c);
+	return *this;
+}
+
 
 template<class T>
 bool CMatrice<T>::operator==(CMatrice<T> MATmatrice)
@@ -699,3 +726,5 @@ CMatrice<T> CMatrice<T>::operator/(T c)
 	//faire quelque chose pour les fuites memoire ici
 	return MATresult;
 }
+
+
