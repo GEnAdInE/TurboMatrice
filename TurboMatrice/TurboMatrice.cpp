@@ -17,12 +17,12 @@ int main()
 	pVector.push(new CVector<double>{ 3,4 });
 	pVector.push(new CVector<double>{ 5,6 });
 
-	
+	for (int i = 0; i < 3; i++)
+	{
+		delete pVector.getElement(i);
+	}
 
-
-	
-	
-	
+	/*
 	CMatrice<double> mat(3, 2, pVector);
 	std::cout << mat.MATgetElement(0, 0);
 	std::cout << " ";
@@ -153,7 +153,7 @@ int main()
 	std::cout << "\n";
 	std::cout << "\n";
 
-	mat += mat;
+	mat = mat+mat+mat;
 	std::cout << mat.MATgetElement(0, 0);
 	std::cout << " ";
 	std::cout << mat.MATgetElement(1, 0);
@@ -175,7 +175,7 @@ int main()
 	
 	
 
-	
+	*/
 	return 0;
 }
 

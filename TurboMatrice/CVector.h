@@ -27,8 +27,7 @@ public:
 	T getElement(unsigned int index) const;
 	T *getVectorElements() const;
 
-	//operators
-	bool operator!=(CVector<T> Vect);
+	
 
 	//misc
 	void print();
@@ -240,19 +239,7 @@ T *CVector<T>::getVectorElements() const {
  *	@param	Vector	Vector to compare to
  *	@example myVector1 != myVector2
  */
-template<class T>
-bool CVector<T>::operator!=(CVector<T> Vect)
-{
-	if (size() == Vect.size())
-	{
-		unsigned int valueListIterator = 0;
-		for (valueListIterator; valueListIterator < size(); valueListIterator++) {
-			if (getElement(valueListIterator) != Vect.getElement(valueListIterator)) return true;
-		}
 
-	}
-	return false;
-}
 
 /**
  *  @brief  Print the vector to stdout.
