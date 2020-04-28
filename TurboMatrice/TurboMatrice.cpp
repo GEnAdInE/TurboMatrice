@@ -161,7 +161,7 @@ int main()
 	std::cout << "\n";
 	mat1 *= 2;
 	mat += mat;
-	mat *= mat;
+	mat *mat1;
 	mat1.MATmodify(0, 0, 69);
 	std::cout << mat1.MATgetElement(0, 0);
 	std::cout << " ";
