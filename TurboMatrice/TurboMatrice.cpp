@@ -1,5 +1,3 @@
-// TurboMatrice.cpp : Ce fichier contient la fonction 'main'. L'exécution du programme commence et se termine à cet endroit.
-//
 
 #include <iostream>
 #include "CMatrice.h"
@@ -7,23 +5,24 @@
 
 int main()
 {
-    std::cout << "Hello World!\n";
+	std::cout << "Hello World!\n";
 
-	
+
 	CVector<CVector<double>*> pVector; // allocate an array of iC int pointers — these are our columns 
 
-	
-	pVector.push(new CVector<double>{1,2});
-	pVector.push(new CVector<double>{ 3,4 });
-	pVector.push(new CVector<double>{ 5,6 });
 
+	pVector.VECpush(new CVector<double>{ 1,2 });
+	pVector.VECpush(new CVector<double>{ 3,4 });
+	pVector.VECpush(new CVector<double>{ 5,6 });
+
+	
+
+	
+	CMatrice<double> mat(3, 2, pVector);
 	for (int i = 0; i < 3; i++)
 	{
-		delete pVector.getElement(i);
+		delete pVector.VECgetElement(i);
 	}
-
-	/*
-	CMatrice<double> mat(3, 2, pVector);
 	std::cout << mat.MATgetElement(0, 0);
 	std::cout << " ";
 	std::cout << mat.MATgetElement(1, 0);
@@ -38,15 +37,16 @@ int main()
 	std::cout << " ";
 	std::cout << "\n";
 	std::cout << "\n";
-	
-	
-	CVector<CVector<double>*> pVector1; // allocate an array of iC double pointers — these are our columns 
 
 
-	pVector1.push(new CVector<double>{ 1,2,3 });;
-	pVector1.push(new CVector<double>{ 4,5,6 });
+	CVector<CVector<double>*> pVector1; // allocate an array of iC double pointers — these are our columns
+	pVector1.VECpush(new CVector<double>{ 1,2,3 });;
+	pVector1.VECpush(new CVector<double>{ 4,5,6 });
 	CMatrice<double> mat4(2, 3, pVector1);
-
+	for (int i = 0; i < 2; i++)
+	{
+		delete pVector1.VECgetElement(i);
+	}
 
 	CMatrice<double> mat0 = mat * mat4;
 	std::cout << mat0.MATgetElement(0, 0);
@@ -58,11 +58,10 @@ int main()
 	std::cout << mat0.MATgetElement(1, 1);
 	std::cout << "\n";
 
-	
 	CMatrice<double> mat1(mat);
-	
+
 	mat1.MATaddRow(2, { 10,10,10 });
-	
+
 	//mat1 = (mat1+mat1); ne marche pas ??
 	std::cout << mat1.MATgetElement(0, 0);
 	std::cout << " ";
@@ -82,7 +81,7 @@ int main()
 	std::cout << " ";
 	std::cout << mat1.MATgetElement(2, 2);
 	std::cout << "\n";
-	
+
 	std::cout << "\n";
 	std::cout << "addColl";
 	std::cout << "\n";
@@ -113,7 +112,6 @@ int main()
 	std::cout << "\n";
 	std::cout << "\n";
 	std::cout << "";
-
 	mat1.MATremoveColumn(3);
 	std::cout << mat1.MATgetElement(0, 0);
 	std::cout << " ";
@@ -146,13 +144,12 @@ int main()
 	std::cout << " ";
 	std::cout << mat1.MATgetElement(2, 1);
 	std::cout << "\n";
-	
-	std::cout << "\n";
-	std::cout << "\n";
-	std::cout << "\n";
-	std::cout << "\n";
-	std::cout << "\n";
 
+	std::cout << "\n";
+	std::cout << "\n";
+	std::cout << "\n";
+	std::cout << "\n";
+	std::cout << "\n";
 	mat = mat+mat+mat;
 	std::cout << mat.MATgetElement(0, 0);
 	std::cout << " ";
@@ -163,6 +160,8 @@ int main()
 	std::cout << mat.MATgetElement(1, 1);
 	std::cout << "\n";
 	mat1 *= 2;
+	mat += mat;
+	mat *= mat;
 	mat1.MATmodify(0, 0, 69);
 	std::cout << mat1.MATgetElement(0, 0);
 	std::cout << " ";
@@ -172,20 +171,7 @@ int main()
 	std::cout << " ";
 	std::cout << mat1.MATgetElement(1, 1);
 	std::cout << "\n";
-	
-	
 
-	*/
+
 	return 0;
 }
-
-// Exécuter le programme : Ctrl+F5 ou menu Déboguer > Exécuter sans débogage
-// Déboguer le programme : F5 ou menu Déboguer > Démarrer le débogage
-
-// Astuces pour bien démarrer : 
-//   1. Utilisez la fenêtre Explorateur de solutions pour ajouter des fichiers et les gérer.
-//   2. Utilisez la fenêtre Team Explorer pour vous connecter au contrôle de code source.
-//   3. Utilisez la fenêtre Sortie pour voir la sortie de la génération et d'autres messages.
-//   4. Utilisez la fenêtre Liste d'erreurs pour voir les erreurs.
-//   5. Accédez à Projet > Ajouter un nouvel élément pour créer des fichiers de code, ou à Projet > Ajouter un élément existant pour ajouter des fichiers de code existants au projet.
-//   6. Pour rouvrir ce projet plus tard, accédez à Fichier > Ouvrir > Projet et sélectionnez le fichier .sln.

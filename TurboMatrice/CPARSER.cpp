@@ -25,54 +25,57 @@ CParser::CParser() {
  *	@example CParser myParser("data.txt");
  */
 CParser::CParser(const char *pcFilePath, char cKeySeparator, char cKeyValueAttribution, bool bRemoveNewLine, bool bRemoveSpecCharacters) {
-	ifstream fileStream;
+	ifstream IFSfileStream;
 
-	fileStream.open(pcFilePath);
+	IFSfileStream.open(pcFilePath);
 	try
 	{
-		if (fileStream.is_open(), ios::in) {
-			while (!fileStream.eof()) {
-				char line[40];
-				fileStream.getline(line, 40, cKeySeparator);
+		if (IFSfileStream.is_open(), ios::in) {
+			while (!IFSfileStream.eof()) {
+				char pcLine[40];
+				IFSfileStream.getline(pcLine, 40, cKeySeparator);
 
-				CString cline = (const char*)line;
+				CString STRline = (const char*)pcLine;
 
+				//SENTENCE MUTATIONS
 				if (bRemoveNewLine) {
-					cline.remove('\n');
+					STRline.STRremove('\n');
 				}
 				if (bRemoveSpecCharacters) {
-					cline.remove('\t');
+					STRline.STRremove('\t');
 				}
-				if (cline.empty()) {
+				if (STRline.STRempty()) {
 					break;
 				}
-				size_t delPos = cline.find(cKeyValueAttribution);
+				size_t nDelPos = STRline.STRfind(cKeyValueAttribution);
 
-				CString key = cline.substr(0, delPos);
+				CString STRkey = STRline.STRsubstr(0, nDelPos);
 
-				CString value;
+				CString STRvalue;
 
-				if (cline.find('[') != -1) {
-					fileStream.getline(line, 40, ']');
-					CString cArray = (const char*)line;
-					cArray.replace('\n', ' ');
-					value += cArray;
+				//ARRAY HANDLING
+				if (STRline.STRfind('[') != -1) {
+					IFSfileStream.getline(pcLine, 40, ']');
+					CString STRarray = (const char*)pcLine;
+					STRarray.STRreplace('\n', ' ');
+					STRvalue += STRarray;
 				}
 				else {
-					value += cline.substr(delPos + 1);
+					STRvalue += STRline.STRsubstr(nDelPos + 1);
 				}
 
 
 				//INTEGRITY CHECK
-				if (key.empty()) {
+				if (STRkey.STRempty()) {
 					throw (const char *)"INTEGRITY ERROR: key empty";
 				}
-				if (value.empty()) {
+				if (STRvalue.STRempty()) {
 					throw  (const char *)"INTEGRITY ERROR: value empty";
 				}
 
-				vsKeyVector.push(key.tochar());
-				vsValueVector.push(value.tochar());
+				//FINAL PUSH
+				VECpcKeyVector.VECpush(STRkey.STRtoChar());
+				VECpcValueVector.VECpush(STRvalue.STRtoChar());
 								
 			}
 
@@ -87,7 +90,7 @@ CParser::CParser(const char *pcFilePath, char cKeySeparator, char cKeyValueAttri
 		cout << e << endl;
 	}
 
-	fileStream.close();
+	IFSfileStream.close();
 }
 
 /**
@@ -96,8 +99,8 @@ CParser::CParser(const char *pcFilePath, char cKeySeparator, char cKeyValueAttri
  *	@example CParser myParser2 = myParser;
  */
 CParser::CParser(const CParser& CPAParam) {
-	vsKeyVector = CPAParam.vsKeyVector;
-	vsValueVector = CPAParam.vsValueVector;
+	VECpcKeyVector = CPAParam.VECpcKeyVector;
+	VECpcValueVector = CPAParam.VECpcValueVector;
 }
 
 /**
@@ -105,10 +108,10 @@ CParser::CParser(const CParser& CPAParam) {
  *	@param	key			Key to get the value of.
  *	@example myParser.getValueOfKey("Structure");
  */
-const char* CParser::getValueOfKey(const char *key) const {
-	const char *value =  NULL;
-	if (keyExist(key, &value)) {
-		return value;
+const char* CParser::PARgetValueOfKey(const char *pcKey) const {
+	const char *pcValue =  NULL;
+	if (PARkeyExist(pcKey, &pcValue)) {
+		return pcValue;
 	}
 	return (char*)nullptr;
 }
@@ -118,32 +121,38 @@ const char* CParser::getValueOfKey(const char *key) const {
  *	@param	value					Pointer to the value of key.
  *	@example keyExist(key, &value);
  */
-bool CParser::keyExist(const char *key, const char **value) const {
-	int keyIndex = vsKeyVector.find(key);
-	if (keyIndex == -1) {
-		value = nullptr;
+bool CParser::PARkeyExist(const char *pcKey, const char **ppcValue) const {
+	int iKeyIndex = VECpcKeyVector.VECfind(pcKey);
+	if (iKeyIndex == -1) {
+		ppcValue = nullptr;
 		return false;
 	}
 	else {
-		*value = vsValueVector.getElement(keyIndex);
+		*ppcValue = VECpcValueVector.VECgetElement(iKeyIndex);
 		return true;
 	}
 }
-//FAIRE GAFFE A PAS FAIRE DE PUSH BACK PCQ 100 != 1 0 0 
-CVector<CString*> CParser::parseArray(CString sArray, char cValueSeparator) const {
-	char *cstringIterator;
-	CVector<CString*> vsArray;
+
+/**
+ *  @brief  Return a vector of the sentences that were separated by cValueSeparator.
+ *  @param  STRsentence						Initial sentence.
+ *	@param	cValueSeparator					Separator character.
+ *	@example CVector<CString*> myVector = parser.PARparseArray(mySentence, ' ');
+ */
+CVector<CString*> CParser::PARparseArray(CString STRsentence, char cValueSeparator) const {
+	char *pcCStingIterator;
+	CVector<CString*> VECSTRarray;
 
 	
-	for (cstringIterator = sArray.begin()+1; cstringIterator < sArray.end()-2; cstringIterator++) {
+	for (pcCStingIterator = STRsentence.STRbegin(); pcCStingIterator < STRsentence.STRend(); pcCStingIterator++) {
 		CString value;
-		while (*cstringIterator != cValueSeparator) {
-			if (*cstringIterator == ']') break;
-			value += *cstringIterator;
-			cstringIterator++;
+		while (*pcCStingIterator != cValueSeparator) {
+			if (*pcCStingIterator == '\0') break;
+			value += *pcCStingIterator;
+			pcCStingIterator++;
 		}
 		value += '\0';
-		vsArray.push(value.clone());
+		VECSTRarray.VECpush(value.STRclone());
 	}
-	return vsArray;
+	return VECSTRarray;
 }

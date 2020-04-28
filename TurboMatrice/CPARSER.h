@@ -13,21 +13,21 @@ class CParser
 
 		//constructors
 		CParser();
-		CParser(const char *sFilePath, char cKeySeparator = ';', char cKeyValueAttribution = ':', bool bRemoveNewLine = true, bool bRemoveSpecCharacters = true);
-		CParser(const CParser& CPAParam);
+		CParser(const char *pcFilePath, char cKeySeparator = ';', char cKeyValueAttribution = ':', bool bRemoveNewLine = true, bool bRemoveSpecCharacters = true);
+		CParser(const CParser& PARParam);
 
 		//accessors
-		const char *getValueOfKey(const char *key) const;
-		CVector<CString*> parseArray(CString sArray, char cValueSeparator = ' ') const;
+		const char *PARgetValueOfKey(const char *pcKey) const;
+		CVector<CString*> PARparseArray(CString STRsentence, char cValueSeparator = ' ') const;
 
 
 		//operators
-		bool keyExist(const char *key, const char **value) const;
+		bool PARkeyExist(const char *pcKey, const char **ppcValue) const;
 
 	private:
 
-		CVector<const char*> vsKeyVector;
-		CVector<const char*> vsValueVector;
+		CVector<const char*> VECpcKeyVector;
+		CVector<const char*> VECpcValueVector;
 
 
 };

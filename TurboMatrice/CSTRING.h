@@ -10,31 +10,31 @@ class CString
 
 		//constructors
 		CString();
-		CString(unsigned int size);
-		CString(const char* sentence);
+		CString(unsigned int nSize);
+		CString(const char* pcSentence);
 		CString(const CString& STRParam);
  
 		//mutators
-		CString substr(unsigned int start, int end = -1);
-		void remove(const char character);
-		void replace(const char character, const char newcharacter);
+		CString STRsubstr(unsigned int nStart, int iEnd = -1);
+		void STRremove(const char cCharacter);
+		void STRreplace(const char cCharacter, const char cNewcharacter);
 
 		//accessors
-		int find(const char character) const;
-		unsigned int occurence(const char character) const;
-		char *tochar() const;
-		int toint() const;
-		double todouble() const;
-		char *begin() const;
-		char *end() const;
+		int STRfind(const char cCharacter) const;
+		unsigned int STRoccurence(const char cCharacter) const;
+		char *STRtoChar() const;
+		int STRtoInt() const;
+		double STRtoDouble() const;
+		char *STRbegin() const;
+		char *STRend() const;
 
 		//operators
-		bool empty();
-		void operator+=(const char character);
-		void operator+=(const char* sentence);
-		void operator+=(CString sentence);
-		bool operator!=(CString sentence);
-		CString* clone();
+		bool STRempty();
+		void operator+=(const char cCharacter);
+		void operator+=(const char* pcSentence);
+		void operator+=(CString STRsentence);
+		bool operator!=(CString STRsentence);
+		CString* STRclone();
 
 		//misc
 		void print();
@@ -45,9 +45,9 @@ class CString
 	
 	private:
 
-		char *STRIcWord;
-		size_t STRIiSize;
+		char *STRpcWord;
+		size_t STRnSize;
 
 		//operators
-		size_t size(const char* sentence) const;
+		size_t STRgetSizeOfChar(const char* pcSentence) const;
 };

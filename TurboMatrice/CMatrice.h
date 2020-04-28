@@ -2,84 +2,77 @@
 #include "CSTRING.h"
 #include "CPARSER.h"
 
-
-template <class T> class CMatrice  : private CVector<T>
+template <class T> class CMatrice : private CVector<T>
 {
-	private:
-		
-		unsigned int iNbRow;
-		unsigned int iNbColumn;
-		CVector<CVector<T>*> VECpVECmatrix;
+private:
 
+	unsigned int nNbRow;
+	unsigned int nNbColumn;
+	CVector<CVector<T>*> VECpVECmatrix;
 
-	public:
-		
-		//constructor and destructor
-		CMatrice(void); //default constructor
-		CMatrice(const CMatrice<T>& MATmat);//Copy construcor 
-		CMatrice(const CParser& PARparser);  //constructor using parser
-		CMatrice(unsigned int nNbColumn, unsigned int nNbRow, CVector<CVector<T>*> VECpVECmat); //Confort Constructor
-		~CMatrice(void);//Destructor
-		
-		//Manipulation of the matrix
-		void MATsetNbRow(unsigned int nRow);
-		void MATsetNbColumn(unsigned int nColumn);
-		unsigned int MATgetNbRow(void);
-		unsigned int MATgetNbColumn(void);
-		T MATgetElement(unsigned int nIteratorColumn, unsigned int nIteratorRow);//return an element of the matrix (column,Line)
-		void MATmodify(unsigned int nIteratorColumn, unsigned int nIteratorRow, T value);// pas besoin
-		void MATaddRow(unsigned int nPos, CVector<T> VECrow);
-		void MATaddColumn(unsigned int nPos, CVector<T> VECcolumn);
-		void MATremoveRow(unsigned int nPos);
-		void MATremoveColumn(unsigned int nPos);
+public:
 
+	//constructor and destructor
+	CMatrice(void); //default constructor
+	CMatrice(const CMatrice<T>& MATmat);//Copy construcort
+	CMatrice(const CParser& PARparser);//Constructor with parser
+	CMatrice(unsigned int nNbColumn, unsigned int nNbRow, CVector<CVector<T>*> VECpVECmat); //Confort Constructor
+	~CMatrice(void);//Destructor 
 
-		bool MATsameDimension(CMatrice<T>& MATmatrice); //test if the matrix have the same size
-			
-		//note for the user : if you use an operator with a custom object make sure to have a correctly devlopp your operator , or create your own function
-		//Operator between Matrix
-		CMatrice<T> operator+(CMatrice<T>& MATmatrice);
-		CMatrice<T> operator-(CMatrice<T>& MATmatrice);
-		CMatrice<T> operator*(CMatrice<T>& MATmatrice);
-		CMatrice<T>& operator+=(CMatrice<T>& MATmatrice);
-		CMatrice<T>& operator-=(CMatrice<T>& MATmatrice);
-		CMatrice<T>& operator*=(CMatrice<T>& MATmatrice);
-		
+	//Methodes utile
+	void MATsetNbRow(unsigned int nRow);
+	void MATsetNbColumn(unsigned int nColumn);
+	unsigned int MATgetNbRow(void);
+	unsigned int MATgetNbColumn(void);
+	T MATgetElement(unsigned int nIteratorColumn, unsigned int nIteratorRow);//return an element of the matrix (column,Line)
+	void MATmodify(unsigned int nIteratorColumn, unsigned int nIteratorRow, T value);// pas besoin
+	void MATaddRow(unsigned int nPos, CVector<T> VECrow);
+	void MATaddColumn(unsigned int nPos, CVector<T> VECcolumn);
+	void MATremoveRow(unsigned int nPos);
+	void MATremoveColumn(unsigned int nPos);
 
-		//Operator with scalaire
-		CMatrice<T> operator*(T c);
-		CMatrice<T> operator/(T c);
-		CMatrice<T>& operator*=(T c);
-		CMatrice<T>& operator/=(T c);
-		
+	bool MATsameDimension(CMatrice<T>& MATmatrice);
 
-		//Other operation
-		//T* operator[](unsigned int iIterator); // maybe later if we have time
-		CMatrice<T>& operator=(CMatrice<T> MATmatrice);
-		bool operator==(CMatrice<T> MATmatrice);
-		bool operator!=(CMatrice<T> MATmatrice);
+	//note for the user : if you use an operator with a custom object make sure to have a correctly devlopp your operator , or create your own function
+	//Operator between Matrix
+	CMatrice<T> operator+(CMatrice<T>& MATmatrice);
+	CMatrice<T> operator-(CMatrice<T>& MATmatrice);
+	CMatrice<T> operator*(CMatrice<T>& MATmatrice);
+	CMatrice<T>& operator+=(CMatrice<T>& MATmatrice);
+	CMatrice<T>& operator-=(CMatrice<T>& MATmatrice);
+	CMatrice<T>& operator*=(CMatrice<T>& MATmatrice);
 
-		//Matrix specific calculation
-		CMatrice<T> MATtr(void); //transpos�
-		
+	//Operator with scalaire
 
+	CMatrice<T> operator*(T c);
+	CMatrice<T> operator/(T c);
+	CMatrice<T>& operator*=(T c);
+	CMatrice<T>& operator/=(T c);
+
+	//Other operation
+	//T* operator[](unsigned int iIterator); // maybe later if we have time
+	void operator=(CMatrice<T> MATmatrice);
+	bool operator==(CMatrice<T> MATmatrice);
+	bool operator!=(CMatrice<T> MATmatrice);
+
+	//Matrix specific calculation
+	CMatrice<T> MATtr(void); //transpos�
 };
 
 /**
  * @brief Default constructor of the class CMatrice
- * 
+ *
  */
 template <class T>
 inline CMatrice<T>::CMatrice(void)
 {
-	iNbRow = 0;
-	iNbColumn = 0;
-	
+	nNbRow = 0;
+	nNbColumn = 0;
 }
 
 /**
  * @brief Copy Constructor of the class CMatrice
- * 
+ *
  * @param mat matrice to be copied
  */
 template <class T>
@@ -100,29 +93,71 @@ CMatrice<T>::CMatrice(const CMatrice<T>& MATmat)
 			}
 		}
 	}
+}
 
+/**
+ * @brief Constructor using parser
+ *
+ * @tparam T
+ * @param PARparser
+ */
+template <class T>
+CMatrice<T>::CMatrice(const CParser& PARparser) {
+
+	CString STRtypeMatrice = PARparser.PARgetValueOfKey("TypeMatrice");
+
+	try
+	{
+		if (STRtypeMatrice != (CString)"double") throw (const char *)"MATRIX type ERROR: only 'double' is handled";
+	}
+	catch (const char *e)
+	{
+		cout << e << endl;
+		return;
+	}
+
+	CString STRnbRow = PARparser.PARgetValueOfKey("NBLignes");
+	CString STRnbColumn = PARparser.PARgetValueOfKey("NBColonnes");
+	CString STRmatrix = PARparser.PARgetValueOfKey("Matrice");
+
+	CVector<CString*> VECTpSTRrowVector = PARparser.PARparseArray(STRmatrix);
+
+	nNbRow = STRnbRow.STRtoInt();
+	nNbColumn = STRnbColumn.STRtoInt();
+
+	for (unsigned int nIteratorColumn = 0; nIteratorColumn < nNbColumn; nIteratorColumn++)
+	{
+		VECpVECmatrix.VECpush(new CVector<T>);
+		for (unsigned int nIteratorRow = 0; nIteratorRow < nNbRow; nIteratorRow++)
+		{
+			CString STRvalue = *VECTpSTRrowVector.VECgetElement(nIteratorColumn + (nNbColumn*nIteratorRow));
+			int iValue = STRvalue.STRtoInt();
+			VECpVECmatrix.VECgetElement(nIteratorColumn)->VECpush(iValue);
+		}
+
+	}
 }
 
 /**
  * @brief Confort constructor of the class CMatrice
- * 
+ *
  * @throw check if the argument are of the right size to generate a matrix
  * @param iNumberColumn number of Column
  * @param iNumberbRow number of Row
  * @param pMat the 2D Vector you want to be your matrix
  * @example CMatrice<TYPE>(2,2,Array)
  * the array need to be a 2d Vector create like so :
- * CVector<CVector<double>*> pVector; 	
+ * CVector<CVector<double>*> pVector;
  *	pVector.push(new CVector<double>{1,2}); //will be column 1
- *	pVector.push(new CVector<double>{ 3,4 }); //will be column 3 
+ *	pVector.push(new CVector<double>{ 3,4 }); //will be column 3
  */
 template <class T>
-CMatrice<T>::CMatrice(unsigned int iNumberColumn, unsigned int iNumberbRow, CVector<CVector<T>*> pMat)
+CMatrice<T>::CMatrice(unsigned int nIteratorColumn, unsigned int nIteratorRow, CVector<CVector<T>*> VECpVECmat)
 {
 	try
 	{
-		if (iNumberColumn<= 0 || iNumberbRow <= 0 )throw (const char *)"MATRIX size ERROR: size of matrix can't be equal or inferior to 0";
-		if (iNumberColumn != pMat.size() && iNumberbRow != pMat.getElement(0)->size())throw (const char *)"MATRIX size ERROR: size of your Vectors need to be the same as the size of the matrix you want to create"; //we can create a matrix that cut the value of a bigger array
+		if (nIteratorColumn <= 0 || nIteratorRow <= 0)throw (const char *)"MATRIX size ERROR: size of matrix can't be equal or inferior to 0";
+		if (nIteratorColumn != VECpVECmat.VECsize() && nIteratorRow != VECpVECmat.VECgetElement(0)->VECsize())throw (const char *)"MATRIX size ERROR: size of your Vectors need to be the same as the size of the matrix you want to create"; //we can create a matrix that cut the value of a bigger array
 	}
 	catch (const char *e)
 	{
@@ -130,128 +165,126 @@ CMatrice<T>::CMatrice(unsigned int iNumberColumn, unsigned int iNumberbRow, CVec
 		return;
 	}
 
-	iNbColumn = iNumberColumn;
-	iNbRow = iNumberbRow;
-	for (unsigned int iCount = 0; iCount < iNbColumn; ++iCount)
-		VECpVECmatrix.push(new CVector<T>);
+	nNbColumn = nIteratorColumn;
+	nNbRow = nIteratorRow;
+	for (unsigned int nCount = 0; nCount < nNbColumn; ++nCount)
+		VECpVECmatrix.VECpush(new CVector<T>);
 
-	for (unsigned int iIteratorColumn = 0; iIteratorColumn < iNbColumn; iIteratorColumn++)
+	for (unsigned int nIteratorColumn = 0; nIteratorColumn < nNbColumn; nIteratorColumn++)
 	{
-		for (unsigned int iIteratorRow = 0; iIteratorRow < iNbRow; iIteratorRow++)
+		for (unsigned int nIteratorRow = 0; nIteratorRow < nNbRow; nIteratorRow++)
 		{
-			VECpVECmatrix.getElement(iIteratorColumn)->push(pMat.getElement(iIteratorColumn)->getElement(iIteratorRow));
+			VECpVECmatrix.VECgetElement(nIteratorColumn)->VECpush(VECpVECmat.VECgetElement(nIteratorColumn)->VECgetElement(nIteratorRow));
 		}
 	}
-
 }
 
 /**
  * @brief Destructor of the class CMatrice
- * 
+ *
  */
 template <class T>
 CMatrice<T>::~CMatrice(void)
 {
-	
-	//faire quelque chose pour les fuites memoire ici du style :  delete[] VECpVECmatrix.getelement(i)
-	
-	
-	
+	for (unsigned int nIteratorColumn = 0; nIteratorColumn < nNbColumn; nIteratorColumn++)
+	{
+		delete VECpVECmatrix.VECgetElement(nIteratorColumn);
+	}
 }
 
 /**
  * @brief Set the number of row of a matrix
- * 
- * 
- * @param iNumberRow number of row 
+ *
+ *
+ * @param iNumberRow number of row
  */
 template <class T>
-inline void CMatrice<T>::MATsetNbRow(unsigned int iNumberRow)
+inline void CMatrice<T>::MATsetNbRow(unsigned int nIteratorRow)
 {
 	try
 	{
-		if (iNumberRow < 0) throw (const char *)"SIZE ERROR: matrix row size bust be > 0";
+		if (nIteratorRow < 0) throw (const char *)"SIZE ERROR: matrix row size bust be > 0";
 	}
 	catch (const char *e)
 	{
 		cout << e << endl;
 		return;
 	}
-	iNbRow = iNumberRow;
+	nNbRow = nIteratorRow;
 }
 
 /**
  * @brief Set the number of column of a matrix
- * 
+ *
  * @param iNumberColumn number of column
  */
 template <class T>
-inline void CMatrice<T>::MATsetNbColumn(unsigned int iNumberColumn)
+inline void CMatrice<T>::MATsetNbColumn(unsigned int nIteratorColumn)
 {
 	try
 	{
-		if (iNumberColumn < 0) throw (const char *)"SIZE ERROR: matrix Column size bust be > 0";
+		if (nIteratorColumn < 0) throw (const char *)"SIZE ERROR: matrix Column size bust be > 0";
 	}
 	catch (const char *e)
 	{
 		cout << e << endl;
 		return;
 	}
-	iNbColumn = iNumberColumn;
+	nNbColumn = nIteratorColumn;
 }
 
 /**
  * @brief Get the number of row from the matrix
- * 
  *
- * @return unsigned int 
+ *
+ * @return unsigned int
  */
 template <class T>
 inline unsigned int CMatrice<T>::MATgetNbRow(void)
 {
-	return iNbRow;
+	return nNbRow;
 }
 
 /**
- * @brief Get the number of Column from the matrix 
- * 
- * @return unsigned int 
+ * @brief Get the number of Column from the matrix
+ *
+ * @return unsigned int
  */
 template <class T>
 inline unsigned int CMatrice<T>::MATgetNbColumn(void)
 {
-	return iNbColumn;
+	return nNbColumn;
 }
 
 /**
  * @brief allow you to get the value of an element from the matrix by know is position
- * 
+ *
  * @param iIteratorColumn column of the element
  * @param iTeratorRow row of the element
  * @return T value of the element
  */
 template <class T>
-inline T CMatrice<T>::MATgetElement(unsigned int iIteratorColumn, unsigned int iTeratorRow)
+inline T CMatrice<T>::MATgetElement(unsigned int nIteratorColumn, unsigned int nIteratorRow)
 {
 	try
 	{
-		if (iIteratorColumn < 0 || iIteratorColumn >= MATgetNbColumn()) throw (const char *)"GETelement ERROR: you can't something out of the matrix size (iIteratorColumn)";
-		if (iTeratorRow < 0 || iTeratorRow >= MATgetNbRow()) throw (const char *)"GETelement ERROR: you can't something out of the matrix size (iTeratorRow)";
+		if (nIteratorColumn < 0 || nIteratorColumn > MATgetNbColumn()) throw (const char *)"GETelement ERROR: you can't something out of the matrix size (nIteratorColumn)";
+		if (nIteratorRow < 0 || nIteratorRow > MATgetNbRow()) throw (const char *)"GETelement ERROR: you can't something out of the matrix size (nIteratorRow)";
 	}
 	catch (const char *e)
 	{
 		cout << e << endl;
 		return NULL;
 	}
-	return VECpVECmatrix.getElement(iIteratorColumn)->getElement(iTeratorRow);
+	return VECpVECmatrix.VECgetElement(nIteratorColumn)->VECgetElement(nIteratorRow);
 }
 
 /**
  * @brief check if the matrix are of the same size
- * 
+ *
  * @param mat matrice to compare
- * @return true 
- * @return false 
+ * @return true
+ * @return false
  */
 template<class T>
 inline bool CMatrice<T>::MATsameDimension(CMatrice<T> &mat)
@@ -268,8 +301,8 @@ inline bool CMatrice<T>::MATsameDimension(CMatrice<T> &mat)
 
 /**
  * @brief operator + to allow addition between matrix
- * 
- * @param MATmatrice 
+ *
+ * @param MATmatrice
  * @return CMatrice<T> return a new matrix with the result of the addition
  */
 template<class T>
@@ -284,31 +317,35 @@ CMatrice<T> CMatrice<T>::operator+(CMatrice<T>& MATmatrice)
 		cout << e << endl;
 		return CMatrice<T>();
 	}
-	
-	CVector<CVector<T>*> VECpVECtmpArray; 
-	for (unsigned int iCount = 0; iCount < iNbColumn; ++iCount)
-		VECpVECtmpArray.push(new CVector<T>);
 
-	for (unsigned int iIteratorColumn = 0; iIteratorColumn < iNbColumn; iIteratorColumn++)
+	CVector<CVector<T>*> VECpVECtmpArray;
+	for (unsigned int nCount = 0; nCount < nNbColumn; ++nCount)
+		VECpVECtmpArray.VECpush(new CVector<T>);
+
+	for (unsigned int nIteratorColumn = 0; nIteratorColumn < nNbColumn; nIteratorColumn++)
 	{
-		for (unsigned int iIteratorRow = 0; iIteratorRow < iNbRow; iIteratorRow++)
+		for (unsigned int nIteratorRow = 0; nIteratorRow < nNbRow; nIteratorRow++)
 		{
-				
-			VECpVECtmpArray.getElement(iIteratorColumn)->push(MATgetElement(iIteratorColumn, iIteratorRow) + MATmatrice.MATgetElement(iIteratorColumn, iIteratorRow));
-					
+
+			VECpVECtmpArray.VECgetElement(nIteratorColumn)->VECpush(MATgetElement(nIteratorColumn, nIteratorRow) + MATmatrice.MATgetElement(nIteratorColumn, nIteratorRow));
+
 		}
 	}
-	CMatrice<T> MATresult(iNbColumn, iNbRow, VECpVECtmpArray);
+	CMatrice<T> MATresult(nNbColumn, nNbRow, VECpVECtmpArray);
 
-	//need to empty tmpArray to prevent memory leak
-	
+	//clear tmpArray
+	for (unsigned int nIterator = 0; nIterator < MATresult.MATgetNbColumn(); nIterator++)
+	{
+		delete VECpVECtmpArray.VECgetElement(nIterator);
+	}
+
 	return MATresult;
 }
 
 /**
  * @brief operator - to allow substraction between matrix
- * 
- * @param MATmatrice 
+ *
+ * @param MATmatrice
  * @return CMatrice<T> return a new matrix with the result of the substraction
  */
 template<class T>
@@ -325,20 +362,24 @@ CMatrice<T> CMatrice<T>::operator-(CMatrice<T>& MATmatrice)
 	}
 
 	CVector<CVector<T>*> VECpVECtmpArray;
-	for (unsigned int iCount = 0; iCount < iNbColumn; ++iCount)
-		VECpVECtmpArray.push(new CVector<T>);
+	for (unsigned int nCount = 0; nCount < nNbColumn; ++nCount)
+		VECpVECtmpArray.VECpush(new CVector<T>);
 
-	for (unsigned int iIteratorColumn = 0; iIteratorColumn < iNbColumn; iIteratorColumn++)
+	for (unsigned int nIteratorColumn = 0; nIteratorColumn < nNbColumn; nIteratorColumn++)
 	{
-		for (unsigned int iIteratorRow = 0; iIteratorRow < iNbRow; iIteratorRow++)
+		for (unsigned int nIteratorRow = 0; nIteratorRow < nNbRow; nIteratorRow++)
 		{
 
-			VECpVECtmpArray.getElement(iIteratorColumn)->push(MATgetElement(iIteratorColumn, iIteratorRow) - MATmatrice.MATgetElement(iIteratorColumn, iIteratorRow));
+			VECpVECtmpArray.VECgetElement(nIteratorColumn)->VECpush(MATgetElement(nIteratorColumn, nIteratorRow) - MATmatrice.MATgetElement(nIteratorColumn, nIteratorRow));
 		}
 	}
-	CMatrice<T> MATresult(iNbColumn, iNbRow, VECpVECtmpArray);
+	CMatrice<T> MATresult(nNbColumn, nNbRow, VECpVECtmpArray);
 
-	//need to empty tmpArray to prevent memory leak
+	//clear tmp array
+	for (unsigned int nIterator = 0; nIterator < MATresult.MATgetNbColumn(); nIterator++)
+	{
+		delete VECpVECtmpArray.VECgetElement(nIterator);
+	}
 
 	return MATresult;
 }
@@ -346,7 +387,7 @@ CMatrice<T> CMatrice<T>::operator-(CMatrice<T>& MATmatrice)
 /**
  * @brief Multiplication of 2 matrix
  * @throw to multiply matrix matrix1 need to have the samne number of column than the matrix2 have column
- * @param MATmatrice 
+ * @param MATmatrice
  * @return CMatrice<T> return a new matrix with the result of the operation
  */
 template<class T>
@@ -361,122 +402,126 @@ CMatrice<T> CMatrice<T>::operator*(CMatrice<T>& MATmatrice)
 		cout << e << endl;
 		return CMatrice<T>();
 	}
-	
-	CVector<CVector<T>*> VECpVECtmpArray;
-	for (unsigned int iCount = 0; iCount < iNbRow; ++iCount)
-		VECpVECtmpArray.push(new CVector<T>);
 
-	for (unsigned int iIteratorRow = 0; iIteratorRow < iNbRow; iIteratorRow++)
+	CVector<CVector<T>*> VECpVECtmpArray;
+	for (unsigned int nCount = 0; nCount < nNbRow; ++nCount)
+		VECpVECtmpArray.VECpush(new CVector<T>);
+
+	for (unsigned int nIteratorRow = 0; nIteratorRow < nNbRow; nIteratorRow++)
 	{
-		for (unsigned int iIteratorColumn = 0; iIteratorColumn < iNbRow; iIteratorColumn++)
+		for (unsigned int nIteratorColumn = 0; nIteratorColumn < nNbRow; nIteratorColumn++)
 		{
-			for (unsigned int iIteratorAlternativ = 0; iIteratorAlternativ < iNbColumn; iIteratorAlternativ++)
+			for (unsigned int iIteratorAlternativ = 0; iIteratorAlternativ < nNbColumn; iIteratorAlternativ++)
 			{
-				if (iIteratorAlternativ == 0) //the tmpArray is empty at first so we can't do an equivalent of =+ we need to assign the first element first
+				if (iIteratorAlternativ == 0)
 				{
-					T var1 = MATgetElement(iIteratorAlternativ, iIteratorRow);
-					T var2 = MATmatrice.MATgetElement(iIteratorColumn, iIteratorAlternativ);
-					VECpVECtmpArray.getElement(iIteratorColumn)->push(var1 * var2);
+					T var1 = MATgetElement(iIteratorAlternativ, nIteratorRow);
+					T var2 = MATmatrice.MATgetElement(nIteratorColumn, iIteratorAlternativ);
+					VECpVECtmpArray.VECgetElement(nIteratorColumn)->VECpush(var1 * var2);
 				}
 				else
 				{
-					T var1 = MATgetElement(iIteratorAlternativ, iIteratorRow);
-					T var2 = MATmatrice.MATgetElement(iIteratorColumn, iIteratorAlternativ);
-					T var3 = var1 * var2 + VECpVECtmpArray.getElement(iIteratorColumn)->getElement(iIteratorRow) ;
-					VECpVECtmpArray.getElement(iIteratorColumn)->modify(var3, iIteratorRow);
+					T var1 = MATgetElement(iIteratorAlternativ, nIteratorRow);
+					T var2 = MATmatrice.MATgetElement(nIteratorColumn, iIteratorAlternativ);
+					T var3 = var1 * var2 + VECpVECtmpArray.VECgetElement(nIteratorColumn)->VECgetElement(nIteratorRow);
+					VECpVECtmpArray.VECgetElement(nIteratorColumn)->VECmodify(var3, nIteratorRow);
 				}
 			}
 		}
 	}
-	CMatrice<T> MATresult(iNbRow, iNbRow, VECpVECtmpArray);
+	CMatrice<T> MATresult(nNbRow, nNbRow, VECpVECtmpArray);
 
-	//faire quelque chose pour les fuites memoire ici
-
+	//clear tmparray
+	for (unsigned int nIterator = 0; nIterator < MATresult.MATgetNbColumn(); nIterator++)
+	{
+		delete VECpVECtmpArray.VECgetElement(nIterator);
+	}
 	return MATresult;
 }
 
 /**
  * @brief operator += same as the operator + but return the value on the current matrix
- * 
- * @param MATmatrice 
- * @return CMatrice<T>& 
+ *
+ * @param MATmatrice
+ * @return CMatrice<T>&
  */
 template<class T>
 inline CMatrice<T>& CMatrice<T>::operator+=(CMatrice<T>& MATmatrice)
 {
-	*this = this->operator+(MATmatrice);
-	return *this;
+	CMatrice<T> tmp = this->operator+(MATmatrice);
+	return tmp;
 }
 
 /**
  * @brief operator -= same as the operator - but return the value on the current matrix
- * 
- * @param MATmatrice 
- * @return CMatrice<T>& 
+ *
+ * @param MATmatrice
+ * @return CMatrice<T>&
  */
 template<class T>
 inline CMatrice<T>& CMatrice<T>::operator-=(CMatrice<T>& MATmatrice)
 {
-	*this = this->operator-(MATmatrice);
-	return *this;
+	CMatrice<T> tmp = this->operator-(MATmatrice);
+	return tmp;
 }
 
 /**
  * @brief operator *= same as the operator * but return the value on the current matrix
- * 
- * @param MATmatrice 
- * @return CMatrice<T>& 
+ *
+ * @param MATmatrice
+ * @return CMatrice<T>&
  */
 template<class T>
 inline CMatrice<T>& CMatrice<T>::operator*=(CMatrice<T>& MATmatrice)
 {
-	*this = this->operator*(MATmatrice);
-	return *this;
+	CMatrice<T> tmp = this->operator*(MATmatrice);
+	return tmp;
 }
-
 
 /**
  * @brief operator *= same as the operator * but return the value on the current matrix
- *  
- * @param c 
- * @return CMatrice<T>& 
+ *
+ * @param c
+ * @return CMatrice<T>&
  */
 template<class T>
 inline CMatrice<T>& CMatrice<T>::operator*=(T c)
 {
-	*this = this->operator*(c);
-	return *this;
+	CMatrice<T> tmp = this->operator*(c);
+	return tmp;
 }
+
 /**
  * @brief operator /= same as the operator * but return the value on the current matrix
- * 
- * @param c 
- * @return CMatrice<T>& 
+ *
+ * @param c
+ * @return CMatrice<T>&
  */
 template<class T>
 inline CMatrice<T>& CMatrice<T>::operator/=(T c)
 {
-	*this = this->operator/(c);
-	return *this;
+	CMatrice<T> tmp = this->operator/(c);
+	return tmp;
 }
 
 /**
  * @brief comparator between 2 matrix
- * 
- * @param MATmatrice 
- * @return true 
- * @return false 
+ *
+ * @param MATmatrice
+ * @return true
+ * @return false
  */
 template<class T>
 bool CMatrice<T>::operator==(CMatrice<T> MATmatrice)
 {
 	if (MATsameDimension)
 	{
-		for (unsigned int iIteratorRow = 0; iIteratorRow < iNbRow; iIteratorRow++)
+
+		for (unsigned int nIteratorRow = 0; nIteratorRow < nNbRow; nIteratorRow++)
 		{
-			for (unsigned int iIteratorColumn = 0; iIteratorColumn < iNbColumn; iIteratorColumn++)
+			for (unsigned int nIteratorColumn = 0; nIteratorColumn < nNbColumn; nIteratorColumn++)
 			{
-				if (MATgetElement(iIteratorColumn, iIteratorRow) != MATmatrice.MATgetElement(iIteratorColumn, iIteratorRow))
+				if (MATgetElement(nIteratorColumn, nIteratorRow) != MATmatrice.MATgetElement(nIteratorColumn, nIteratorRow))
 				{
 					return false;
 				}
@@ -489,10 +534,10 @@ bool CMatrice<T>::operator==(CMatrice<T> MATmatrice)
 
 /**
  * @brief compartor for difference between 2 matrix
- * 
- * @param MATmatrice 
- * @return true 
- * @return false 
+ *
+ * @param MATmatrice
+ * @return true
+ * @return false
  */
 template<class T>
 bool CMatrice<T>::operator!=(CMatrice<T> MATmatrice)
@@ -500,11 +545,11 @@ bool CMatrice<T>::operator!=(CMatrice<T> MATmatrice)
 	if (MATsameDimension)
 	{
 
-		for (unsigned int iIteratorRow = 0; iIteratorRow < iNbRow; iIteratorRow++)
+		for (unsigned int nIteratorRow = 0; nIteratorRow < nNbRow; nIteratorRow++)
 		{
-			for (unsigned int iIteratorColumn = 0; iIteratorColumn < iNbColumn; iIteratorColumn++)
+			for (unsigned int nIteratorColumn = 0; nIteratorColumn < nNbColumn; nIteratorColumn++)
 			{
-				if (MATgetElement(iIteratorColumn, iIteratorRow) != MATmatrice.MATgetElement(iIteratorColumn, iIteratorRow))
+				if (MATgetElement(nIteratorColumn, nIteratorRow) != MATmatrice.MATgetElement(nIteratorColumn, nIteratorRow))
 				{
 					return true;
 				}
@@ -515,45 +560,47 @@ bool CMatrice<T>::operator!=(CMatrice<T> MATmatrice)
 	return true;
 }
 
+
 /**
- * @brief Modificator of an element from the matrix by know his position
- * 
+ * @brief Modificator of element from the matrix by know his position
+ *
  * @throw make sure that you modify a value inside the matrix
- * @param iIteratorColumn 
- * @param iTeratorRow 
- * @param val 
+ * @param iIteratorColumn
+ * @param iTeratorRow
+ * @param val
  */
 template<class T>
-void CMatrice<T>::MATmodify(unsigned int iIteratorColumn, unsigned int iTeratorRow, T val)
+void CMatrice<T>::MATmodify(unsigned int nIteratorColumn, unsigned int nIteratorRow, T val)
 {
 	try
 	{
-		if (iIteratorColumn < 0 || iIteratorColumn >= MATgetNbColumn())throw (const char *)"Matrix modify: can't modify a value out of Column";
-		if (iTeratorRow < 0 || iTeratorRow >= MATgetNbRow())throw (const char *)"Matrix modify: can't modify a value out of Row";
+		if (nIteratorColumn < 0 || nIteratorColumn >= MATgetNbColumn())throw (const char *)"Matrix modify: can't modify a value out of Column";
+		if (nIteratorRow < 0 || nIteratorRow >= MATgetNbRow())throw (const char *)"Matrix modify: can't modify a value out of Row";
+		//if (typeid(val) != typeid(MATgetElement(nIteratorRow,j))) throw (const char *)"Matrix modify: value need to be the same type of your matrix data";
 	}
 	catch (const char *e)
 	{
 		cout << e << endl;
 		return;
 	}
-	VECpVECmatrix.getElement(iIteratorColumn)->modify(val, iTeratorRow);
+	VECpVECmatrix.VECgetElement(nIteratorColumn)->VECmodify(val, nIteratorRow);
 }
 
 /**
- * @brief allow you to add a row to your matrix 
- * 
+ * @brief allow you to add a row to your matrix
+ *
  * @throw make sure to enter correct position and row
- * @param iPos position where you want to add your row 
+ * @param iPos position where you want to add your row
  * @param row you row must be a 1 dimension CVector of a size = to the number of column
  */
 template<class T>
-void CMatrice<T>::MATaddRow(unsigned int iPos, CVector<T> row)
+void CMatrice<T>::MATaddRow(unsigned int nPos, CVector<T> VECrow)
 {
 	try
 	{
-		if (iPos<0) throw (const char *)"AddRow error: can't add under 0";
-		if (iPos> (iNbRow+1)) throw (const char *)"AddRow error: can't be more than the nb of row+1";
-		if (row.size() !=  iNbColumn)throw (const char *)"AddRow error: please provide a Vector with the same nb of Column";
+		if (nPos < 0) throw (const char *)"AddRow error: can't add under 0";
+		if (nPos > (nNbRow + 1)) throw (const char *)"AddRow error: can't be more than the nb of row+1";
+		if (VECrow.VECsize() != nNbColumn)throw (const char *)"AddRow error: please provide a Vector with the same nb of Column";
 	}
 	catch (const char *e)
 	{
@@ -561,50 +608,55 @@ void CMatrice<T>::MATaddRow(unsigned int iPos, CVector<T> row)
 		return;
 	}
 
-	CVector<CVector<T>*> *VECpVECtmpArray = new CVector<CVector<T>*>;
-	for (unsigned int iCount = 0; iCount < iNbColumn; ++iCount)
-		VECpVECtmpArray->push(new CVector<T>);
+	CVector<CVector<T>*> VECpVECtmpArray;
+	for (unsigned int nCount = 0; nCount < nNbColumn; ++nCount)
+		VECpVECtmpArray.VECpush(new CVector<T>);
 
-	for (unsigned int iIteratorRow = 0; iIteratorRow < iPos; iIteratorRow++)
+	for (unsigned int nIteratorRow = 0; nIteratorRow < nPos; nIteratorRow++)
 	{
-		for (unsigned int iIteratorColumn = 0; iIteratorColumn < iNbColumn; iIteratorColumn++)
+		for (unsigned int nIteratorColumn = 0; nIteratorColumn < nNbColumn; nIteratorColumn++)
 		{
 
-			VECpVECtmpArray->getElement(iIteratorColumn)->push(MATgetElement(iIteratorColumn, iIteratorRow));
+			VECpVECtmpArray.VECgetElement(nIteratorColumn)->VECpush(MATgetElement(nIteratorColumn, nIteratorRow));
 		}
 	}
-	for (unsigned int iIteratorColumn = 0; iIteratorColumn < iNbColumn; iIteratorColumn++)
+	for (unsigned int nIteratorColumn = 0; nIteratorColumn < nNbColumn; nIteratorColumn++)
 	{
-		VECpVECtmpArray->getElement(iIteratorColumn)->push(row.getElement(iIteratorColumn));
+		VECpVECtmpArray.VECgetElement(nIteratorColumn)->VECpush(VECrow.VECgetElement(nIteratorColumn));
 	}
-	for (unsigned int iIteratorRow = iPos + 1; iIteratorRow < iNbRow + 1; iIteratorRow++)
+	for (unsigned int nIteratorRow = nPos + 1; nIteratorRow < nNbRow + 1; nIteratorRow++)
 	{
-		for (unsigned int iIteratorColumn = 0; iIteratorColumn < iNbColumn; iIteratorColumn++)
+		for (unsigned int nIteratorColumn = 0; nIteratorColumn < nNbColumn; nIteratorColumn++)
 		{
 
-			VECpVECtmpArray->getElement(iIteratorColumn)->push(MATgetElement(iIteratorColumn, iIteratorRow - 1));
+			VECpVECtmpArray.VECgetElement(nIteratorColumn)->VECpush(MATgetElement(nIteratorColumn, nIteratorRow - 1));
 		}
 	}
-	MATsetNbRow(iNbRow + 1);
-	VECpVECmatrix = *VECpVECtmpArray;
-	//need to empty VECpVECmatrix before assigning it the new tmpArray;
+	
+	CMatrice<T> tmpMatrix(nNbColumn, nNbRow + 1, VECpVECtmpArray);
+
+	for (unsigned int nIterator = 0; nIterator < nNbColumn; nIterator++)
+	{
+		delete VECpVECtmpArray.VECgetElement(nIterator);
+	}
+	*this = tmpMatrix;
 }
 
 /**
  * @brief allow you to add Column to your matrix
- * 
+ *
  * @throw make sure to enter correct position and Column
  * @param iPos position where you want to add your Column
  * @param Column you Column must be a 1 dimension CVector of a size = to the number of row
  */
 template<class T>
-void CMatrice<T>::MATaddColumn(unsigned int iPos, CVector<T> Column)
+void CMatrice<T>::MATaddColumn(unsigned int nPos, CVector<T> VECcolumn)
 {
 	try
 	{
-		if (iPos < 0) throw (const char *)"AddColumn error: can't add under 0";
-		if (iPos > (iNbColumn + 1)) throw (const char *)"AddColumn error: can't be more than the nb of Column+1";
-		if (Column.size() != iNbRow)throw (const char *)"AddColumn error: please provide a Vector with the same nb of row";
+		if (nPos < 0) throw (const char *)"AddColumn error: can't add under 0";
+		if (nPos > (nNbColumn + 1)) throw (const char *)"AddColumn error: can't be more than the nb of Column+1";
+		if (VECcolumn.VECsize() != nNbRow)throw (const char *)"AddColumn error: please provide a Vector with the same nb of row";
 	}
 	catch (const char *e)
 	{
@@ -612,49 +664,54 @@ void CMatrice<T>::MATaddColumn(unsigned int iPos, CVector<T> Column)
 		return;
 	}
 
-	CVector<CVector<T>*> *VECpVECtmpArray = new CVector<CVector<T>*>;
-	for (unsigned int iCount = 0; iCount < iNbColumn + 1; ++iCount)
-		VECpVECtmpArray->push(new CVector<T>);
+	CVector<CVector<T>*> VECpVECtmpArray;
+	for (unsigned int nCount = 0; nCount < nNbColumn + 1; ++nCount)
+		VECpVECtmpArray.VECpush(new CVector<T>);
 
-	for (unsigned int iIteratorRow = 0; iIteratorRow < iNbRow; iIteratorRow++)
+	for (unsigned int nIteratorRow = 0; nIteratorRow < nNbRow; nIteratorRow++)
 	{
-		for (unsigned int iIteratorColumn = 0; iIteratorColumn < iPos; iIteratorColumn++)
+		for (unsigned int nIteratorColumn = 0; nIteratorColumn < nPos; nIteratorColumn++)
 		{
 
-			VECpVECtmpArray->getElement(iIteratorColumn)->push(MATgetElement(iIteratorColumn, iIteratorRow));
+			VECpVECtmpArray.VECgetElement(nIteratorColumn)->VECpush(MATgetElement(nIteratorColumn, nIteratorRow));
 		}
 	}
-	for (unsigned int iIteratorColumn = 0; iIteratorColumn < iNbRow; iIteratorColumn++)
+	for (unsigned int nIteratorColumn = 0; nIteratorColumn < nNbRow; nIteratorColumn++)
 	{
-		VECpVECtmpArray->getElement(iPos)->push(Column.getElement(iIteratorColumn));
+		VECpVECtmpArray.VECgetElement(nPos)->VECpush(VECcolumn.VECgetElement(nIteratorColumn));
 	}
-	for (unsigned int iIteratorRow = 0; iIteratorRow < iNbRow; iIteratorRow++)
+	for (unsigned int nIteratorRow = 0; nIteratorRow < nNbRow; nIteratorRow++)
 	{
-		for (unsigned int iIteratorColumn = iPos + 1; iIteratorColumn < iNbColumn + 1; iIteratorColumn++)
+		for (unsigned int nIteratorColumn = nPos + 1; nIteratorColumn < nNbColumn + 1; nIteratorColumn++)
 		{
 
-			VECpVECtmpArray->getElement(iIteratorColumn)->push(MATgetElement(iIteratorColumn - 1, iIteratorRow));
+			VECpVECtmpArray.VECgetElement(nIteratorColumn)->VECpush(MATgetElement(nIteratorColumn - 1, nIteratorRow));
 		}
 	}
-	MATsetNbColumn(iNbColumn + 1);
-	VECpVECmatrix = *VECpVECtmpArray;
-	//need to empty VECpVECmatrix before assigning it the new tmpArray;
+
+	CMatrice<T> tmpMatrix(nNbColumn+1, nNbRow, VECpVECtmpArray);
+
+	for (unsigned int nIterator = 0; nIterator < nNbColumn+1; nIterator++)
+	{
+		delete VECpVECtmpArray.VECgetElement(nIterator);
+	}
+
+	*this = tmpMatrix;
 }
 
 /**
  * @brief allow you to remove row from your matrix
- * 
+ *
  * @throw make sure to enter correct position
  * @param iPos position of the row to delete
  */
 template<class T>
-void CMatrice<T>::MATremoveRow(unsigned int iPos)
+void CMatrice<T>::MATremoveRow(unsigned int nPos)
 {
-	//could have had a VECdelete(int iPos) function to CVector to make it easier;
 	try
 	{
-		if (iPos < 0) throw (const char *)"RemoveRow error: can't remove under 0";
-		if (iPos > (iNbRow)) throw (const char *)"RemoveRow error: iPos can't be more than the nb of row";
+		if (nPos < 0) throw (const char *)"RemoveRow error: can't remove under 0";
+		if (nPos > (nNbRow)) throw (const char *)"RemoveRow error: nPos can't be more than the nb of row";
 	}
 	catch (const char *e)
 	{
@@ -662,29 +719,34 @@ void CMatrice<T>::MATremoveRow(unsigned int iPos)
 		return;
 	}
 
-	CVector<CVector<T>*> *VECpVECtmpArray = new CVector<CVector<T>*>;
-	for (unsigned int iCount = 0; iCount < iNbColumn; ++iCount)
-		VECpVECtmpArray->push(new CVector<T>);
+	CVector<CVector<T>*> VECpVECtmpArray;
+	for (unsigned int nCount = 0; nCount < nNbColumn; ++nCount)
+		VECpVECtmpArray.VECpush(new CVector<T>);
 
-	for (unsigned int iIteratorRow = 0; iIteratorRow < iPos; iIteratorRow++)
+	for (unsigned int nIteratorRow = 0; nIteratorRow < nPos; nIteratorRow++)
 	{
-		for (unsigned int iIteratorColumn = 0; iIteratorColumn < iNbColumn; iIteratorColumn++)
+		for (unsigned int nIteratorColumn = 0; nIteratorColumn < nNbColumn; nIteratorColumn++)
 		{
 
-			VECpVECtmpArray->getElement(iIteratorColumn)->push(MATgetElement(iIteratorColumn, iIteratorRow));
+			VECpVECtmpArray.VECgetElement(nIteratorColumn)->VECpush(MATgetElement(nIteratorColumn, nIteratorRow));
 		}
 	}
-	for (unsigned int iIteratorRow = iPos; iIteratorRow < iNbRow-1; iIteratorRow++)
+	for (unsigned int nIteratorRow = nPos; nIteratorRow < nNbRow - 1; nIteratorRow++)
 	{
-		for (unsigned int iIteratorColumn = 0; iIteratorColumn < iNbColumn; iIteratorColumn++)
+		for (unsigned int nIteratorColumn = 0; nIteratorColumn < nNbColumn; nIteratorColumn++)
 		{
 
-			VECpVECtmpArray->getElement(iIteratorColumn)->push(MATgetElement(iIteratorColumn, iIteratorRow + 1));
+			VECpVECtmpArray.VECgetElement(nIteratorColumn)->VECpush(MATgetElement(nIteratorColumn, nIteratorRow + 1));
 		}
 	}
-	MATsetNbRow(iNbRow - 1);
-	VECpVECmatrix = *VECpVECtmpArray;
-	//need to empty VECpVECmatrix before assigning it the new tmpArray;
+
+	CMatrice<T> tmpMatrix(nNbColumn, nNbRow - 1, VECpVECtmpArray);
+
+	for (unsigned int nIterator = 0; nIterator < nNbColumn; nIterator++)
+	{
+		delete VECpVECtmpArray.VECgetElement(nIterator);
+	}
+	*this = tmpMatrix;
 }
 
 /**
@@ -693,13 +755,12 @@ void CMatrice<T>::MATremoveRow(unsigned int iPos)
  * @param iPos position of the column you want to remove
  */
 template<class T>
-void CMatrice<T>::MATremoveColumn(unsigned int iPos)
+void CMatrice<T>::MATremoveColumn(unsigned int nPos)
 {
-	//could have had a VECdelete(int iPos) function to CVector to make it easier;
 	try
 	{
-		if (iPos < 0) throw (const char *)"RemoveColumn error: can't remove under 0";
-		if (iPos > (iNbColumn)) throw (const char *)"RemoveColumn error: iPos can't be more than the nb of Column";
+		if (nPos < 0) throw (const char *)"RemoveColumn error: can't remove under 0";
+		if (nPos > (nNbColumn)) throw (const char *)"RemoveColumn error: nPos can't be more than the nb of Column";
 	}
 	catch (const char *e)
 	{
@@ -707,137 +768,142 @@ void CMatrice<T>::MATremoveColumn(unsigned int iPos)
 		return;
 	}
 
-	CVector<CVector<T>*> *VECpVECtmpArray = new CVector<CVector<T>*>;
-	for (unsigned int iCount = 0; iCount < iNbColumn - 1; ++iCount)
-		VECpVECtmpArray->push(new CVector<T>);
+	CVector<CVector<T>*> VECpVECtmpArray;
+	for (unsigned int nCount = 0; nCount < nNbColumn - 1; ++nCount)
+		VECpVECtmpArray.VECpush(new CVector<T>);
 
-	for (unsigned int iIteratorRow = 0; iIteratorRow < iNbRow; iIteratorRow++)
+	for (unsigned int nIteratorRow = 0; nIteratorRow < nNbRow; nIteratorRow++)
 	{
-		for (unsigned int iIteratorColumn = 0; iIteratorColumn < iPos; iIteratorColumn++)
+		for (unsigned int nIteratorColumn = 0; nIteratorColumn < nPos; nIteratorColumn++)
 		{
 
-			VECpVECtmpArray->getElement(iIteratorColumn)->push(MATgetElement(iIteratorColumn, iIteratorRow));
+			VECpVECtmpArray.VECgetElement(nIteratorColumn)->VECpush(MATgetElement(nIteratorColumn, nIteratorRow));
 		}
 	}
-	for (unsigned int iIteratorRow = 0; iIteratorRow < iNbRow; iIteratorRow++)
+	for (unsigned int nIteratorRow = 0; nIteratorRow < nNbRow; nIteratorRow++)
 	{
-		for (unsigned int iIteratorColumn = iPos + 1; iIteratorColumn < iNbColumn; iIteratorColumn++)
+		for (unsigned int nIteratorColumn = nPos + 1; nIteratorColumn < nNbColumn; nIteratorColumn++)
 		{
 
-			VECpVECtmpArray->getElement(iIteratorColumn - 1)->push(MATgetElement(iIteratorColumn, iIteratorRow));
+			VECpVECtmpArray.VECgetElement(nIteratorColumn - 1)->VECpush(MATgetElement(nIteratorColumn, nIteratorRow));
 		}
 	}
-	MATsetNbColumn(iNbColumn - 1);
-	VECpVECmatrix = *VECpVECtmpArray;
-	//need to empty VECpVECmatrix before assigning it the new tmpArray;
+	CMatrice<T> tmpMatrix(nNbColumn-1, nNbRow , VECpVECtmpArray);
+
+	for (unsigned int nIterator = 0; nIterator < nNbColumn-1; nIterator++)
+	{
+		delete VECpVECtmpArray.VECgetElement(nIterator);
+	}
+
+	*this = tmpMatrix;
 }
-
-
 /**
  * @brief Allow you to transpose your matrix
- * 
+ *
  * @return CMatrice<T> return the transposed matrix
  */
 template<class T>
 CMatrice<T> CMatrice<T>::MATtr(void)
 {
 	CVector<CVector<T>*> VECpVECtmpArray;
-	for (unsigned int iCount = 0; iCount < iNbColumn; ++iCount)
-		VECpVECtmpArray.push(new CVector<T>);
+	for (unsigned int nCount = 0; nCount < nNbColumn; ++nCount)
+		VECpVECtmpArray.VECpush(new CVector<T>);
 
-
-	for (unsigned int iIteratorRow = 0; iIteratorRow < iNbRow; iIteratorRow++)
+	for (unsigned int nIteratorRow = 0; nIteratorRow < nNbRow; nIteratorRow++)
 	{
-		for (unsigned int iIteratorRow = 0; iIteratorRow < iNbColumn; iIteratorRow++)
+		for (unsigned int nIteratorRow = 0; nIteratorRow < nNbColumn; nIteratorRow++)
 		{
 
-			VECpVECtmpArray.getElement(iIteratorRow)->push(MATgetElement(iIteratorRow, iIteratorRow));
+			VECpVECtmpArray.VECgetElement(nIteratorRow)->VECpush(MATgetElement(nIteratorRow, nIteratorRow));
 		}
 	}
-	CMatrice<T>* MATresult = new CMatrice<T>(iNbRow, iNbColumn, VECpVECtmpArray);
-	//memory leak from tmpArray
-	return *MATresult;
+	CMatrice<T> MATresult(nNbRow, nNbColumn, VECpVECtmpArray);
+	
+	//clear tmparray
+	for (unsigned int nIterator = 0; nIterator < nNbColumn; nIterator++)
+	{
+		delete VECpVECtmpArray.VECgetElement(nIterator);
+	}
+	return MATresult;
 }
+
 
 /**
  * @brief assignation operator , change the matrix value by a new one
- * 
- * @param MATmatrice 
- * @return CMatrice<T>& 
+ *
+ * @param MATmatrice
+ * @return CMatrice<T>&
  */
 template<class T>
-CMatrice<T>& CMatrice<T>::operator=(CMatrice<T> MATmatrice)
+void CMatrice<T>::operator=(CMatrice<T> MATmatrice)
 {
-	//need to empty the current matrix before assigning new value
-	if (VECpVECmatrix.getVectorElements() != NULL) {
-		for (unsigned int iIteratorColumn = VECpVECmatrix.size()-1; iIteratorColumn >0; iIteratorColumn--)
+	//remove data from current matrix
+	if (VECpVECmatrix.VECgetVectorElements() != NULL) {
+		for (unsigned int nIterator = 0; nIterator < nNbColumn; nIterator++)
 		{
-			if (VECpVECmatrix.getElement(iIteratorColumn) != NULL)
-			{
-				VECpVECmatrix.pop();
-			
-			}
-			
+			delete VECpVECmatrix.VECgetElement(nIterator);
 		}
-		VECpVECmatrix.pop();
+		VECpVECmatrix.setSize(0);
 	}
-	
-	for (unsigned int iCount = 0; iCount < MATmatrice.MATgetNbColumn(); ++iCount)
-		VECpVECmatrix.push(new CVector<T>);
+
+	for (unsigned int nCount = 0; nCount < MATmatrice.MATgetNbColumn(); ++nCount)
+		VECpVECmatrix.VECpush(new CVector<T>);
 
 	MATsetNbColumn(MATmatrice.MATgetNbColumn());
 	MATsetNbRow(MATmatrice.MATgetNbRow());
 
-	for (unsigned int iIteratorColumn = 0; iIteratorColumn < iNbColumn; iIteratorColumn++)
+	for (unsigned int nIteratorColumn = 0; nIteratorColumn < nNbColumn; nIteratorColumn++)
 	{
-		for (unsigned int iIteratorRow = 0; iIteratorRow < iNbRow; iIteratorRow++)
+		for (unsigned int nIteratorRow = 0; nIteratorRow < nNbRow; nIteratorRow++)
 		{
-			VECpVECmatrix.getElement(iIteratorColumn)->push(MATmatrice.MATgetElement(iIteratorColumn,iIteratorRow));
-			
+			VECpVECmatrix.VECgetElement(nIteratorColumn)->VECpush(MATmatrice.MATgetElement(nIteratorColumn, nIteratorRow));
 		}
 	}
-	return *this;
 }
+
 /**
  * @brief operator * with a number
- * 
- * @param c 
- * @return CMatrice<T> 
+ *
+ * @param c
+ * @return CMatrice<T>
  */
 template<class T>
 CMatrice<T> CMatrice<T>::operator*(T c)
 {
 	CVector<CVector<T>*> VECpVECtmpArray;
-	for (unsigned int iCount = 0; iCount < iNbColumn; ++iCount)
-		VECpVECtmpArray.push(new CVector<T>);
+	for (unsigned int nCount = 0; nCount < nNbColumn; ++nCount)
+		VECpVECtmpArray.VECpush(new CVector<T>);
 
-	for (unsigned int iIteratorColumn = 0; iIteratorColumn < iNbColumn; iIteratorColumn++)
+	for (unsigned int nIteratorColumn = 0; nIteratorColumn < nNbColumn; nIteratorColumn++)
 	{
-		for (unsigned int iIteratorRow = 0; iIteratorRow < iNbRow; iIteratorRow++)
+		for (unsigned int nIteratorRow = 0; nIteratorRow < nNbRow; nIteratorRow++)
 		{
-
-			VECpVECtmpArray.getElement(iIteratorColumn)->push(MATgetElement(iIteratorColumn, iIteratorRow)*c);
+			VECpVECtmpArray.VECgetElement(nIteratorColumn)->VECpush(MATgetElement(nIteratorColumn, nIteratorRow)*c);
 		}
 	}
-	CMatrice<T> MATresult(iNbColumn, iNbRow, VECpVECtmpArray);
-	//memory leak from tmpArary
+	CMatrice<T> MATresult(nNbColumn, nNbRow, VECpVECtmpArray);
+
+	//clear tmparray
+	for (unsigned int nIterator = 0; nIterator < MATresult.MATgetNbColumn(); nIterator++)
+	{
+		delete VECpVECtmpArray.VECgetElement(nIterator);
+	}
 	return MATresult;
 }
 
 /**
  * @brief operator / with a number
- * 
+ *
  * @throw can't divide by 0
- * @param c 
- * @return CMatrice<T> 
+ * @param c
+ * @return CMatrice<T>
  */
 template<class T>
 CMatrice<T> CMatrice<T>::operator/(T c)
 {
 	try
 	{
-		if (c == 0) throw (const char *)"Operator / error: can't divide by 0";
-		
+		if (c == 0) throw (const char *)"Operator / error: can't divide by under 0";
 	}
 	catch (const char *e)
 	{
@@ -845,19 +911,22 @@ CMatrice<T> CMatrice<T>::operator/(T c)
 		return CMatrice<T>();
 	}
 	CVector<CVector<T>*> VECpVECtmpArray;
-	for (unsigned int iCount = 0; iCount < iNbColumn; ++iCount)
-		VECpVECtmpArray.push(new CVector<T>);
+	for (unsigned int nCount = 0; nCount < nNbColumn; ++nCount)
+		VECpVECtmpArray.VECpush(new CVector<T>);
 
-	for (unsigned int iIteratorColumn = 0; iIteratorColumn < iNbColumn; iIteratorColumn++)
+	for (unsigned int nIteratorColumn = 0; nIteratorColumn < nNbColumn; nIteratorColumn++)
 	{
-		for (unsigned int iIteratorRow = 0; iIteratorRow < iNbRow; iIteratorRow++)
+		for (unsigned int nIteratorRow = 0; nIteratorRow < nNbRow; nIteratorRow++)
 		{
-			VECpVECtmpArray.getElement(iIteratorColumn)->push(MATgetElement(iIteratorColumn, iIteratorRow)/c);
+			VECpVECtmpArray.VECgetElement(nIteratorColumn)->VECpush(MATgetElement(nIteratorColumn, nIteratorRow) / c);
 		}
 	}
-	CMatrice<T> MATresult(iNbColumn, iNbRow, VECpVECtmpArray);
-	//memory leak from tmpArray
+	CMatrice<T> MATresult(nNbColumn, nNbRow, VECpVECtmpArray);
+	
+	//clear tmparray
+	for (unsigned int nIterator = 0; nIterator < MATresult.MATgetNbColumn(); nIterator++)
+	{
+		delete VECpVECtmpArray.VECgetElement(nIterator);
+	}
 	return MATresult;
 }
-
-

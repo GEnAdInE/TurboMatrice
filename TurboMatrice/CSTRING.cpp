@@ -1,26 +1,36 @@
 #include "CSTRING.h"
 
+/**
+ *  @brief  Default constructor of the class.
+ *	@example CString myLine;
+ */
 CString::CString() {
-	STRIiSize = 0;
-	STRIcWord = nullptr;
+	STRnSize = 0;
+	STRpcWord = nullptr;
 }
 
-CString::CString(unsigned int size) {
-	STRIiSize = size;
-	STRIcWord = new char[size];
-}
 /**
  *  @brief  Comfort constructor of the class.
- *  @param  sentence	Sentence to work with.
+ *  @param  nSize	Size of the sentence to work with.
+ *	@example CString myLine(10);
+ */
+CString::CString(unsigned int nSize) {
+	STRnSize = nSize;
+	STRpcWord = new char[nSize];
+}
+
+/**
+ *  @brief  Comfort constructor of the class.
+ *  @param  pcSentence	Sentence to work with.
  *	@example CString myLine = (const char*)line;
  */
-CString::CString(const char* sentence) {
-	STRIiSize = size(sentence);
-	STRIcWord = new char[STRIiSize+1];
+CString::CString(const char* pcSentence) {
+	STRnSize = STRgetSizeOfChar(pcSentence);
+	STRpcWord = new char[STRnSize+1];
 
-	for (unsigned int cstringIterator = 0; cstringIterator <= STRIiSize; cstringIterator++) {
-		STRIcWord[cstringIterator] = *sentence;
-		sentence++;
+	for (unsigned int nCStringIterator = 0; nCStringIterator <= STRnSize; nCStringIterator++) {
+		STRpcWord[nCStringIterator] = *pcSentence;
+		pcSentence++;
 	}
 }
 
@@ -30,182 +40,198 @@ CString::CString(const char* sentence) {
  *	@example CString myLine2 = myLine1;
  */
 CString::CString(const CString& STRParam) {
-	unsigned int cstringIterator = 0;
-	STRIiSize = STRParam.STRIiSize;
-	STRIcWord = new char[STRIiSize+1];
+	unsigned int nCStringIterator = 0;
+	STRnSize = STRParam.STRnSize;
+	STRpcWord = new char[STRnSize+1];
 
-	for (cstringIterator; cstringIterator < STRIiSize; cstringIterator++) {
-		STRIcWord[cstringIterator] = STRParam.STRIcWord[cstringIterator];
+	for (nCStringIterator; nCStringIterator < STRnSize; nCStringIterator++) {
+		STRpcWord[nCStringIterator] = STRParam.STRpcWord[nCStringIterator];
 	}
-	STRIcWord[cstringIterator] = '\0';
+	STRpcWord[nCStringIterator] = '\0';
 }
 
 /**
  *  @brief  Return a new CString extracted from the old CString between start and end. If no index is set to end then end takes the end of the old CString
  *	@throws Indexes are out of range.
- *  @param  start	Start index of the new CString.
- *	@param	end		End index of the new CString.
- *	@example myLine.substr(0); //Whole CString
- *	@example myLine.substr(0, 1);
+ *  @param  nStart	Start index of the new CString.
+ *	@param	nEnd		End index of the new CString.
+ *	@example myLine.STRsubstr(0); //Whole CString
+ *	@example myLine.STRsubstr(0, 1);
  */
-CString CString::substr(unsigned int start, int end) {
-	unsigned int cstringIterator = 0;
-	unsigned int newCStringIterator = 0;
-	if (end == -1) end = STRIiSize;
+CString CString::STRsubstr(unsigned int nStart, int nEnd) {
+	unsigned int nCStringIterator = 0;
+	unsigned int nNewCStringIterator = 0;
+	if (nEnd == -1) nEnd = STRnSize;
 
 	try
 	{
-		if(end-start < 0 || end > STRIiSize || start < 0) throw (const char *)"SUBSTR ERROR: Indexes are out of range";
+		if(nEnd-nStart < 0 || nEnd > STRnSize || nStart < 0) throw (const char *)"SUBSTR ERROR: Indexes are out of range";
 	}
 	catch (const char *e)
 	{
 		cout << e << endl;
 	}
 
-	char *newString = new char[end - start + 1];
-	for (cstringIterator = start; cstringIterator < end; cstringIterator++) {
-		newString[newCStringIterator] = STRIcWord[cstringIterator];
-		newCStringIterator++;
+	char *pcNewString = new char[nEnd - nStart + 1];
+	for (nCStringIterator = nStart; nCStringIterator < nEnd; nCStringIterator++) {
+		pcNewString[nNewCStringIterator] = STRpcWord[nCStringIterator];
+		nNewCStringIterator++;
 	}
-	newString[newCStringIterator] = '\0';
-	CString newCString = (const char*)newString;
-	delete[] newString;
+	pcNewString[nNewCStringIterator] = '\0';
+	CString STRnewCString = (const char*)pcNewString;
+	delete[] pcNewString;
 
-	return newCString;
+	return STRnewCString;
 
 }
 
 /**
  *  @brief  Remove all occurences of a character.
- *	@param	character		Character to remove from the CString.
- *	@example myLine.remove('\n');
+ *	@param	cCharacter		Character to remove from the CString.
+ *	@example myLine.STRremove('\n');
  */
-void CString::remove(const char character) {
-	unsigned int nOccurence = occurence(character);
+void CString::STRremove(const char cCharacter) {
+	unsigned int nOccurence = STRoccurence(cCharacter);
 
 	if (nOccurence != 0) {
-		unsigned int cstringIterator = 0;
-		unsigned int newCStringIterator = 0;
-		char *newString = new char[STRIiSize-nOccurence+1];
-		for (cstringIterator; cstringIterator <= STRIiSize; cstringIterator++) {
-			if (STRIcWord[cstringIterator] != character) {
-				newString[newCStringIterator] = STRIcWord[cstringIterator];
-				newCStringIterator++;
+		unsigned int nCStringIterator = 0;
+		unsigned int nNewCStringIterator = 0;
+		char *pcNewString = new char[STRnSize-nOccurence+1];
+		for (nCStringIterator; nCStringIterator <= STRnSize; nCStringIterator++) {
+			if (STRpcWord[nCStringIterator] != cCharacter) {
+				pcNewString[nNewCStringIterator] = STRpcWord[nCStringIterator];
+				nNewCStringIterator++;
 			}
 		}
-		delete[] STRIcWord;
-		STRIcWord = newString;
-		STRIiSize -= nOccurence;
+		delete[] STRpcWord;
+		STRpcWord = pcNewString;
+		STRnSize -= nOccurence;
 	}
 	
 
 }
-void CString::replace(const char character, const char newcharacter) {
-	unsigned int nOccurence = occurence(character);
+
+/**
+ *  @brief  Replace all occurences of a character with cNewCharacter.
+ *	@param	cCharacter			Character to be replaced.
+ *	@param	cNewCharacter		Character to replace.
+ *	@example myLine.STRreplace('\n', ' ');
+ */
+void CString::STRreplace(const char cCharacter, const char cNewCharacter) {
+	unsigned int nOccurence = STRoccurence(cCharacter);
 
 	if (nOccurence != 0) {
-		unsigned int cstringIterator = 0;
-		unsigned int newCStringIterator = 0;
-		char *newString = new char[STRIiSize+1];
-		for (cstringIterator; cstringIterator <= STRIiSize; cstringIterator++) {
-			if (STRIcWord[cstringIterator] != character) {
-				newString[newCStringIterator] = STRIcWord[cstringIterator];
-				newCStringIterator++;
+		unsigned int nCStringIterator = 0;
+		unsigned int nNewCStringIterator = 0;
+		char *pcNewString = new char[STRnSize+1];
+		for (nCStringIterator; nCStringIterator <= STRnSize; nCStringIterator++) {
+			if (STRpcWord[nCStringIterator] != cCharacter) {
+				pcNewString[nNewCStringIterator] = STRpcWord[nCStringIterator];
+				nNewCStringIterator++;
 			}
 			else {
-				newString[newCStringIterator] = newcharacter;
-				newCStringIterator++;
+				pcNewString[nNewCStringIterator] = cNewCharacter;
+				nNewCStringIterator++;
 			}
 		}
-		delete[] STRIcWord;
-		STRIcWord = newString;
+		delete[] STRpcWord;
+		STRpcWord = pcNewString;
 	}
 }
 
 /**
- *  @brief  Return the index of the first specified character
- *	@param	character	Character to find.
- *	@example myLine.find(':');
+ *  @brief  Return the index of the first specified cCharacter
+ *	@param	cCharacter	Character to find.
+ *	@example myLine.STRfind(':');
  */
-int CString::find(const char character) const {
-	unsigned int cstringIterator = 0;
-	for (cstringIterator; cstringIterator < STRIiSize; cstringIterator++) {
-		if (STRIcWord[cstringIterator] == character) {
-			return cstringIterator;
+int CString::STRfind(const char cCharacter) const {
+	unsigned int nCStringIterator = 0;
+	for (nCStringIterator; nCStringIterator < STRnSize; nCStringIterator++) {
+		if (STRpcWord[nCStringIterator] == cCharacter) {
+			return nCStringIterator;
 		}
 	}
 	return -1;
 }
 
 /**
- *  @brief  Count all occurences of a character inside CString
- *	@param	character	Character to count the occurences of.
- *	@example myLine.occurrence('a');
+ *  @brief  Count all occurences of a cCharacter inside CString
+ *	@param	cCharacter	Character to count the occurences of.
+ *	@example myLine.STRoccurrence('a');
  */
-unsigned int CString::occurence(const char character) const {
-	unsigned int cstringIterator = 0;
-	unsigned int occurence = 0;
-	for (cstringIterator; cstringIterator < STRIiSize; cstringIterator++) {
-		if (STRIcWord[cstringIterator] == character) {
-			occurence++;
+unsigned int CString::STRoccurence(const char cCharacter) const {
+	unsigned int nCStringIterator = 0;
+	unsigned int nOccurence = 0;
+	for (nCStringIterator; nCStringIterator < STRnSize; nCStringIterator++) {
+		if (STRpcWord[nCStringIterator] == cCharacter) {
+			nOccurence++;
 		}
 	}
-	return occurence;
+	return nOccurence;
 }
 
 /**
  *  @brief  Return a the CString as a char*
- *	@example char *line = myLine.tochar();
+ *	@example char *line = myLine.STRtoChar();
  */
-char *CString::tochar() const {
-	unsigned int cstringIterator = 0;
-	char *newString = new char[STRIiSize+1];
-	for (cstringIterator = 0; cstringIterator < STRIiSize+1; cstringIterator++) {
-		newString[cstringIterator] = STRIcWord[cstringIterator];
+char *CString::STRtoChar() const {
+	unsigned int nCStringIterator = 0;
+	char *pcNewString = new char[STRnSize+1];
+	for (nCStringIterator = 0; nCStringIterator < STRnSize+1; nCStringIterator++) {
+		pcNewString[nCStringIterator] = STRpcWord[nCStringIterator];
 	}
-	return newString;
+	return pcNewString;
 }
 
-int CString::toint() const {
+/**
+ *  @brief  Try to return the CString as an integer
+ *	@example int num = myLine.STRtoInt();
+ */
+int CString::STRtoInt() const {
 
-	int newInt = 0;
-	unsigned int cstringInterator = 0;
-	for (cstringInterator; cstringInterator < STRIiSize; cstringInterator++) {
-		if (STRIcWord[cstringInterator] == '-') continue;
-		newInt += (STRIcWord[cstringInterator] - '0')*pow(10, STRIiSize-cstringInterator-1);
+	int iNewInt = 0;
+	unsigned int nCStringIterator = 0;
+	for (nCStringIterator; nCStringIterator < STRnSize; nCStringIterator++) {
+		if (STRpcWord[nCStringIterator] == '-') continue;
+		iNewInt += (STRpcWord[nCStringIterator] - '0')*pow(10, STRnSize-nCStringIterator-1);
 	}
-	if (find('-') != -1) {
-		newInt = -newInt;
+	if (STRfind('-') != -1) {
+		iNewInt = -iNewInt;
 	}
-	return newInt;
+	return iNewInt;
 
 }
-double CString::todouble() const {
+
+/**
+ *  @brief  Try to return the CString as an double
+ *	@example double num = myLine.STRtoDouble();
+ */
+double CString::STRtoDouble() const {
 	return (double)1;
 }
 
 /**
  *  @brief  Return a pointer on the first character of the CString.
- *	@example myLine.begin();
+ *	@example myLine.STRbegin();
  */
-char *CString::begin() const {
-	return STRIcWord;
+char *CString::STRbegin() const {
+	return STRpcWord;
 }
 
 /**
  *  @brief  Return a pointer on the last character of the CString.
- *	@example myLine.end();
+ *	@example myLine.STRend();
  */
-char *CString::end() const {
-	return STRIcWord + STRIiSize + 1;
+char *CString::STRend() const {
+	return STRpcWord + STRnSize + 1;
 }
 
 /**
  *  @brief  Return true if the CString is empty, false otherwise.
- *	@example myLine.empty();
+ *	@example myLine.STRempty();
  */
-bool CString::empty() {
-	if (*STRIcWord == '\0') {
+bool CString::STRempty() {
+	if (*STRpcWord == '\0') {
 		return true;
 	}
 	else {
@@ -213,77 +239,101 @@ bool CString::empty() {
 	}
 }
 
-void CString::operator+=(const char character) {
+/**
+ *  @brief  Concatenate a character to a new CString.
+ *	@param	cCharacter	Character to add at the end of the CString.
+ *	@example myLine+='\0';
+ */
+void CString::operator+=(const char cCharacter) {
 
-	unsigned int cstringIterator = 0;
-	char *newString = new char[STRIiSize + 2];
-	for (cstringIterator; cstringIterator < STRIiSize; cstringIterator++) {
-		newString[cstringIterator] = STRIcWord[cstringIterator];
+	unsigned int nCStringIterator = 0;
+	char *pcNewString = new char[STRnSize + 2];
+	for (nCStringIterator; nCStringIterator < STRnSize; nCStringIterator++) {
+		pcNewString[nCStringIterator] = STRpcWord[nCStringIterator];
 	}
 
-	if (character != '\0') STRIiSize += 1;
-	for (cstringIterator; cstringIterator < STRIiSize + 1; cstringIterator++) {
-		newString[cstringIterator] = character;
+	if (cCharacter != '\0') STRnSize += 1;
+	for (nCStringIterator; nCStringIterator < STRnSize + 1; nCStringIterator++) {
+		pcNewString[nCStringIterator] = cCharacter;
 	}
 
-	if (STRIcWord != NULL) delete[] STRIcWord;
+	if (STRpcWord != NULL) delete[] STRpcWord;
 
-	STRIcWord = newString;
+	STRpcWord = pcNewString;
 }
 
-void CString::operator+=(const char *sentence) {
+/**
+ *  @brief  Concatenate a sentence to a new CString.
+ *	@param	pcSentence	Sentence to add at the end of the CString.
+ *	@example myLine+="Hello";
+ */
+void CString::operator+=(const char *pcSentence) {
 
-	unsigned int cstringIterator = 0;
-	char *newString = new char[STRIiSize + size(sentence) + 1];
-	for (cstringIterator; cstringIterator < STRIiSize; cstringIterator++) {
-		newString[cstringIterator] = STRIcWord[cstringIterator];
+	unsigned int nCStringIterator = 0;
+	char *pcNewString = new char[STRnSize + STRgetSizeOfChar(pcSentence) + 1];
+	for (nCStringIterator; nCStringIterator < STRnSize; nCStringIterator++) {
+		pcNewString[nCStringIterator] = STRpcWord[nCStringIterator];
 	}
 
-	unsigned int newCStringIterator = 0;
-	STRIiSize += size(sentence);
-	for (cstringIterator; cstringIterator < STRIiSize+1; cstringIterator++) {
-		newString[cstringIterator] = sentence[newCStringIterator];
-		newCStringIterator++;
+	unsigned int nNewCStringIterator = 0;
+	STRnSize += STRgetSizeOfChar(pcSentence);
+	for (nCStringIterator; nCStringIterator < STRnSize+1; nCStringIterator++) {
+		pcNewString[nCStringIterator] = pcSentence[nNewCStringIterator];
+		nNewCStringIterator++;
 	}
 
-	if (STRIcWord != NULL) delete[] STRIcWord;
+	if (STRpcWord != NULL) delete[] STRpcWord;
 
-	STRIcWord = newString;
+	STRpcWord = pcNewString;
 }
 
-void CString::operator+=(CString sentence) {
+/**
+ *  @brief  Concatenate a CString to a new CString.
+ *	@param	STRsentence	 CString to add at the end of the CString.
+ *	@example myLine+= myLine2;
+ */
+void CString::operator+=(CString STRsentence) {
 
-	unsigned int cstringIterator = 0;
-	char *newString = new char[STRIiSize + sentence.STRIiSize + 1];
-	for (cstringIterator; cstringIterator < STRIiSize; cstringIterator++) {
-		newString[cstringIterator] = STRIcWord[cstringIterator];
+	unsigned int nCStringIterator = 0;
+	char *pcNewString = new char[STRnSize + STRsentence.STRnSize + 1];
+	for (nCStringIterator; nCStringIterator < STRnSize; nCStringIterator++) {
+		pcNewString[nCStringIterator] = STRpcWord[nCStringIterator];
 	}
 
-	unsigned int newCStringIterator = 0;
-	STRIiSize += sentence.STRIiSize;
-	for (cstringIterator; cstringIterator < STRIiSize + 1; cstringIterator++) {
-		newString[cstringIterator] = sentence.STRIcWord[newCStringIterator];
-		newCStringIterator++;
+	unsigned int nNewCStringIterator = 0;
+	STRnSize += STRsentence.STRnSize;
+	for (nCStringIterator; nCStringIterator < STRnSize + 1; nCStringIterator++) {
+		pcNewString[nCStringIterator] = STRsentence.STRpcWord[nNewCStringIterator];
+		nNewCStringIterator++;
 	}
 
-	if (STRIcWord != NULL) delete[] STRIcWord;
+	if (STRpcWord != NULL) delete[] STRpcWord;
 
-	STRIcWord = newString;
+	STRpcWord = pcNewString;
 }
 
-bool CString::operator!=(CString sentence) {
+/**
+ *  @brief  Return true if the two CString are equal character by character, false otherwise.
+ *	@param	STRsentence	Sentence to test with current CString.
+ *	@example myLine != myLine2;
+ */
+bool CString::operator!=(CString STRsentence) {
 
-	if (STRIiSize != sentence.STRIiSize) return true;
+	if (STRnSize != STRsentence.STRnSize) return true;
 
-	unsigned int cstringIterator = 0;
-	for (cstringIterator; cstringIterator < STRIiSize; cstringIterator++) {
-		if (STRIcWord[cstringIterator] != sentence.STRIcWord[cstringIterator]) return true;
+	unsigned int nCStringIterator = 0;
+	for (nCStringIterator; nCStringIterator < STRnSize; nCStringIterator++) {
+		if (STRpcWord[nCStringIterator] != STRsentence.STRpcWord[nCStringIterator]) return true;
 	}
 	
 	return false;
 }
 
-CString *CString::clone() {
+/**
+ *  @brief  Return a new CString copied from current object.
+ *	@example myLine.clone();
+ */
+CString *CString::STRclone() {
 	CString *cloned = new CString(*this);
 	return cloned;
 }
@@ -293,26 +343,26 @@ CString *CString::clone() {
  *	@example myLine.print();
  */
 void CString::print() {
-	cout << *STRIcWord << endl;
+	cout << *STRpcWord << endl;
 }
 
 /**
  *  @brief  Destructor of the class.
  */
 CString::~CString() {
-	delete[] STRIcWord;
+	delete[] STRpcWord;
 }
 
 /**
  *  @brief  Return the size of a const char*
- *	@example myLine.size(line);
+ *	@example myLine.STRgetSizeOfChar(line);
  */
-size_t CString:: size(const char *sentence) const {
-	size_t size = 0;
-	while (*sentence) {
-		sentence++;
-		size++;
+size_t CString:: STRgetSizeOfChar(const char *pcSentence) const {
+	size_t nSize = 0;
+	while (*pcSentence) {
+		pcSentence++;
+		nSize++;
 	}
-	return size;
+	return nSize;
 }
 

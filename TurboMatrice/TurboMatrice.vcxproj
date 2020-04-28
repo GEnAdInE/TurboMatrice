@@ -152,10 +152,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Cexception.cpp" />
+    <ClCompile Include="CPARSER.cpp" />
+    <ClCompile Include="CSTRING.cpp" />
     <ClCompile Include="TurboMatrice.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Cexception.h" />
+    <ClInclude Include="CPARSER.h" />
+    <ClInclude Include="CSTRING.h" />
     <ClInclude Include="CVector.h" />
     <ClInclude Include="CListe.h" />
     <ClInclude Include="CMatrice.h" />
