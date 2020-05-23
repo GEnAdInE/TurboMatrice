@@ -15,9 +15,10 @@ class CString
 		CString(const CString& STRParam);
  
 		//mutators
-		CString STRsubstr(unsigned int nStart, int iEnd = -1);
+		CString STRsubstr(unsigned int nStart);
+		CString STRsubstr(unsigned int nStart, unsigned int nEnd);
 		void STRremove(const char cCharacter);
-		void STRreplace(const char cCharacter, const char cNewcharacter);
+		void STRreplace(const char cCharacter, const char cNewCharacter);
 
 		//accessors
 		int STRfind(const char cCharacter) const;
@@ -32,12 +33,8 @@ class CString
 		bool STRempty();
 		void operator+=(const char cCharacter);
 		void operator+=(const char* pcSentence);
-		void operator+=(CString STRsentence);
-		bool operator!=(CString STRsentence);
-		CString* STRclone();
-
-		//misc
-		void print();
+		void operator+=(const CString &STRsentence);
+		bool operator!=(const CString &STRsentence);
 
 		//destructor
 		~CString();

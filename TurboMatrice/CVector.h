@@ -7,57 +7,44 @@ using namespace std;
 template <class T>
 class CVector
 {
-public:
+	public:
 
-	//constructors
-	CVector();
-	CVector(initializer_list<T> ILarrayParam);
-	CVector(const CVector& VECParam);
+		//constructors
+		CVector();
+		CVector(initializer_list<T> ILarrayParam);
+		CVector(const CVector& VECParam);
 
-	//mutators
-	void VECpush(T value);
-	void VECpop();
-	bool VECmodify(T element, unsigned int nIndex);
+		//mutators
+		void VECpush(T value);
+		void VECpop();
+		bool VECmodify(T element, unsigned int nIndex);
+		void VECsetSize(size_t nSize);
 
-	//accessors
-	size_t VECsize() const;
-	T VECbegin() const;
-	T VECend() const;
-	int VECfind(T element) const;
-	T VECgetElement(unsigned int nIndex) const;
-	T *VECgetVectorElements() const;
+		//accessors
+		size_t VECsize() const;
+		T *VECbegin() const;
+		T *VECend() const;
+		int VECfind(T element) const;
+		T VECgetElement(unsigned int nIndex) const;
+		T *VECgetVectorElements() const;
 
 
-	//operators
-	bool operator!=(CVector<T> VECvector);
+		//operators
+		bool operator!=(const CVector<T> &VECvector);
 
-	//misc
-	void print();
+		//destructors
+		void VECdelete();
+		~CVector();
 
-	//destructor
-	~CVector();
+	private:
 
-	//only use if you know what you are doing
-	void setSize(int iSize);
+		size_t VECnCapacity;
+		T *VECpValueList;
 
-private:
-
-	size_t VECnCapacity;
-	T *VECpValueList;
-
-	
-
-	//misc
-	bool VECpointerValueEqual(const T element1, const T element2) const;
+		//misc
+		bool VECpointerValueEqual(T element1, T element2) const;
 
 };
-
-
-template<class T>
-void CVector<T>::setSize(int iSize)
-{
-	VECnCapacity = iSize;
-}
 
 /**
  *  @brief		Default constructor of the class.
@@ -75,7 +62,7 @@ CVector<T>::CVector() {
  */
 template<class T>
 CVector<T>::CVector(initializer_list<T> ILarrayParam) {
-	VECnCapacity = ILarrayParam.size();
+	VECnCapacity = ILarrayParam.VECsize();
 	VECpValueList = new T[VECnCapacity];
 	unsigned int nValueListIterator = 0;
 	for (auto pArrayIterator = ILarrayParam.begin(); pArrayIterator != ILarrayParam.end(); pArrayIterator++) {
@@ -159,7 +146,7 @@ void CVector<T>::VECpop() {
  *	@example myVector.modify("World", 1);
  */
 template<class T>
-bool CVector<T>::VECmodify(T element, unsigned int nIndex) {
+inline bool CVector<T>::VECmodify(T element, unsigned int nIndex) {
 	try
 	{
 		if (nIndex < 0 || nIndex > VECnCapacity - 1) throw (const char *)"MODIFY ERROR: index is out of vector range";
@@ -179,7 +166,7 @@ bool CVector<T>::VECmodify(T element, unsigned int nIndex) {
  *	@example size_t myVectorSize = myVector.size();
  */
 template<class T>
-size_t CVector<T>::VECsize() const {
+inline size_t CVector<T>::VECsize() const {
 	return VECnCapacity;
 }
 
@@ -188,8 +175,8 @@ size_t CVector<T>::VECsize() const {
  *	@example const char* myVectorBegin = myVector.begin();
  */
 template<class T>
-T CVector<T>::VECbegin() const {
-	return VECpValueList[0];
+inline T *CVector<T>::VECbegin() const {
+	return VECpValueList;
 }
 
 /**
@@ -197,8 +184,8 @@ T CVector<T>::VECbegin() const {
  *	@example const char* myVectorEnd = myVector.end();
  */
 template<class T>
-T CVector<T>::VECend() const {
-	return VECpValueList[VECnCapacity - 1];
+inline T *CVector<T>::VECend() const {
+	return VECpValueList + VECnCapacity - 1;
 }
 
 /**
@@ -224,7 +211,7 @@ int CVector<T>::VECfind(T element) const {
  *	@example const char* myWord = myVector.getElement(1);
  */
 template<class T>
-T CVector<T>::VECgetElement(unsigned int nIndex) const {
+inline T CVector<T>::VECgetElement(unsigned int nIndex) const {
 	try
 	{
 		if (nIndex < 0 || nIndex > VECnCapacity - 1) throw (const char *)"GET ERROR: index is out of vector range";
@@ -232,7 +219,7 @@ T CVector<T>::VECgetElement(unsigned int nIndex) const {
 	catch (const char *e)
 	{
 		cout << e << endl;
-		return NULL;
+		return T();
 	}
 
 	return VECpValueList[nIndex];
@@ -243,7 +230,7 @@ T CVector<T>::VECgetElement(unsigned int nIndex) const {
  *	@example const char** mySentence = myVector.getVectorElements();
  */
 template<class T>
-T *CVector<T>::VECgetVectorElements() const {
+inline T *CVector<T>::VECgetVectorElements() const {
 	return VECpValueList;
 }
 
@@ -253,39 +240,44 @@ T *CVector<T>::VECgetVectorElements() const {
  *	@example myVector1 != myVector2
  */
 template<class T>
-bool CVector<T>::operator!=(CVector<T> VECvector)
+bool CVector<T>::operator!=(const CVector<T> &VECvector)
 {
 	if (VECsize() != VECvector.VECsize()) return true;
-
+	
 	unsigned int nValueListIterator = 0;
 	for (nValueListIterator; nValueListIterator < VECsize(); nValueListIterator++) {
 		if (VECgetElement(nValueListIterator) != VECvector.VECgetElement(nValueListIterator)) return true;
 	}
 
 	return false;
-
-
+	
+	
 }
 
 /**
- *  @brief  Print the vector to stdout.
- *  @example myVector.print();
+ *  @brief  Clears a vector of pointer.
  */
-template<class T>
-void CVector<T>::print() {
-	unsigned int nValueListIterator = 0;
-	for (nValueListIterator; nValueListIterator < VECnCapacity; nValueListIterator++) {
-		cout << VECpValueList[nValueListIterator] << endl;
+template <class T>
+void CVector<T>::VECdelete() {
+	for (unsigned int nVectorIterator = 0; nVectorIterator < VECnCapacity; nVectorIterator++) {
+		delete VECpValueList[nVectorIterator];
 	}
 }
-
 /**
  *  @brief  Destructor of the class
  */
 template<class T>
 CVector<T>::~CVector() {
 	delete[] VECpValueList;
-	
+}
+
+/**
+ *  @brief  Trick for Matrix, do not use.
+ */
+template<class T>
+void CVector<T>::VECsetSize(size_t nSize)
+{
+	VECnCapacity = nSize;
 }
 
 /**
@@ -295,7 +287,7 @@ CVector<T>::~CVector() {
  *	@example pointerValueEqual(element1, element2);
  */
 template<class T>
-bool CVector<T>::VECpointerValueEqual(T element1, T element2) const {
+bool CVector<T>::VECpointerValueEqual(T element1,T element2) const {
 	while (*element1) {
 		if (*element1 != *element2) {
 			return false;

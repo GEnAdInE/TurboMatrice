@@ -23,11 +23,16 @@ class CParser
 
 		//operators
 		bool PARkeyExist(const char *pcKey, const char **ppcValue) const;
+		bool PARisOpen();
+
+		~CParser();
 
 	private:
 
 		CVector<const char*> VECpcKeyVector;
 		CVector<const char*> VECpcValueVector;
+
+		bool bParseError = false;
 
 
 };

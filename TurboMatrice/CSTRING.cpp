@@ -51,14 +51,48 @@ CString::CString(const CString& STRParam) {
 }
 
 /**
- *  @brief  Return a new CString extracted from the old CString between start and end. If no index is set to end then end takes the end of the old CString
+ *  @brief  Return a new CString extracted from the old CString between nStart and end.
+ *	@throws Indexes are out of range.
+ *  @param  nStart	Start index of the new CString.
+ *	@example myLine.STRsubstr(0); //Whole CString
+ *	@example myLine.STRsubstr(0, 1);
+ */
+CString CString::STRsubstr(unsigned int nStart) {
+	unsigned int nCStringIterator = 0;
+	unsigned int nNewCStringIterator = 0;
+	unsigned int nEnd = STRnSize;
+
+	try
+	{
+		if (nEnd - nStart < 0 || nEnd > STRnSize || nStart < 0) throw (const char *)"SUBSTR ERROR: Indexes are out of range";
+	}
+	catch (const char *e)
+	{
+		cout << e << endl;
+	}
+
+	char *pcNewString = new char[nEnd - nStart + 1];
+	for (nCStringIterator = nStart; nCStringIterator < nEnd; nCStringIterator++) {
+		pcNewString[nNewCStringIterator] = STRpcWord[nCStringIterator];
+		nNewCStringIterator++;
+	}
+	pcNewString[nNewCStringIterator] = '\0';
+	CString STRnewCString = (const char*)pcNewString;
+	delete[] pcNewString;
+
+	return STRnewCString;
+
+}
+
+/**
+ *  @brief  Return a new CString extracted from the old CString between nStart and nEnd.
  *	@throws Indexes are out of range.
  *  @param  nStart	Start index of the new CString.
  *	@param	nEnd		End index of the new CString.
  *	@example myLine.STRsubstr(0); //Whole CString
  *	@example myLine.STRsubstr(0, 1);
  */
-CString CString::STRsubstr(unsigned int nStart, int nEnd) {
+CString CString::STRsubstr(unsigned int nStart, unsigned int nEnd) {
 	unsigned int nCStringIterator = 0;
 	unsigned int nNewCStringIterator = 0;
 	if (nEnd == -1) nEnd = STRnSize;
@@ -193,7 +227,7 @@ int CString::STRtoInt() const {
 	unsigned int nCStringIterator = 0;
 	for (nCStringIterator; nCStringIterator < STRnSize; nCStringIterator++) {
 		if (STRpcWord[nCStringIterator] == '-') continue;
-		iNewInt += (STRpcWord[nCStringIterator] - '0')*pow(10, STRnSize-nCStringIterator-1);
+		iNewInt += (STRpcWord[nCStringIterator] - '0')*(int)pow(10, STRnSize-nCStringIterator-1);
 	}
 	if (STRfind('-') != -1) {
 		iNewInt = -iNewInt;
@@ -205,9 +239,10 @@ int CString::STRtoInt() const {
 /**
  *  @brief  Try to return the CString as an double
  *	@example double num = myLine.STRtoDouble();
+ *	@warning Implements atof() because the conversion is complicated
  */
 double CString::STRtoDouble() const {
-	return (double)1;
+	return atof(STRpcWord);
 }
 
 /**
@@ -292,7 +327,7 @@ void CString::operator+=(const char *pcSentence) {
  *	@param	STRsentence	 CString to add at the end of the CString.
  *	@example myLine+= myLine2;
  */
-void CString::operator+=(CString STRsentence) {
+void CString::operator+=(const CString &STRsentence) {
 
 	unsigned int nCStringIterator = 0;
 	char *pcNewString = new char[STRnSize + STRsentence.STRnSize + 1];
@@ -317,7 +352,7 @@ void CString::operator+=(CString STRsentence) {
  *	@param	STRsentence	Sentence to test with current CString.
  *	@example myLine != myLine2;
  */
-bool CString::operator!=(CString STRsentence) {
+bool CString::operator!=(const CString &STRsentence) {
 
 	if (STRnSize != STRsentence.STRnSize) return true;
 
@@ -327,23 +362,6 @@ bool CString::operator!=(CString STRsentence) {
 	}
 	
 	return false;
-}
-
-/**
- *  @brief  Return a new CString copied from current object.
- *	@example myLine.clone();
- */
-CString *CString::STRclone() {
-	CString *cloned = new CString(*this);
-	return cloned;
-}
-
-/**
- *  @brief  Print the CString to stdout.
- *	@example myLine.print();
- */
-void CString::print() {
-	cout << *STRpcWord << endl;
 }
 
 /**

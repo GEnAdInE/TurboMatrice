@@ -10,6 +10,7 @@ CParser::CParser() {
 	}
 	catch (const char *e)
 	{
+		bParseError = true;
 		cout << e << endl;
 	}
 }
@@ -30,7 +31,7 @@ CParser::CParser(const char *pcFilePath, char cKeySeparator, char cKeyValueAttri
 	IFSfileStream.open(pcFilePath);
 	try
 	{
-		if (IFSfileStream.is_open(), ios::in) {
+		if (IFSfileStream.is_open()) {
 			while (!IFSfileStream.eof()) {
 				char pcLine[40];
 				IFSfileStream.getline(pcLine, 40, cKeySeparator);
@@ -87,6 +88,7 @@ CParser::CParser(const char *pcFilePath, char cKeySeparator, char cKeyValueAttri
 	}
 	catch (const char *e)
 	{
+		bParseError = true;
 		cout << e << endl;
 	}
 
@@ -134,6 +136,13 @@ bool CParser::PARkeyExist(const char *pcKey, const char **ppcValue) const {
 }
 
 /**
+ *  @brief  Return true if the parser encountered no errors parsing the file, false otherwise.
+ *	@example if(myParser.PARisOpen()) { ... };
+ */
+bool CParser::PARisOpen() {
+	return !bParseError;
+}
+/**
  *  @brief  Return a vector of the sentences that were separated by cValueSeparator.
  *  @param  STRsentence						Initial sentence.
  *	@param	cValueSeparator					Separator character.
@@ -152,7 +161,15 @@ CVector<CString*> CParser::PARparseArray(CString STRsentence, char cValueSeparat
 			pcCStingIterator++;
 		}
 		value += '\0';
-		VECSTRarray.VECpush(value.STRclone());
+		VECSTRarray.VECpush(new CString(value));
 	}
 	return VECSTRarray;
+}
+
+/**
+ *  @brief  Destructor of the class.
+ */
+CParser::~CParser() {
+	VECpcKeyVector.VECdelete();
+	VECpcValueVector.VECdelete();
 }
