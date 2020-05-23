@@ -268,13 +268,13 @@ inline T CMatrice<T>::MATgetElement(unsigned int nIteratorColumn, unsigned int n
 {
 	try
 	{
-		if (nIteratorColumn < 0 || nIteratorColumn > MATgetNbColumn()) throw (const char *)"GETelement ERROR: you can't something out of the matrix size (nIteratorColumn)";
-		if (nIteratorRow < 0 || nIteratorRow > MATgetNbRow()) throw (const char *)"GETelement ERROR: you can't something out of the matrix size (nIteratorRow)";
+		if (nIteratorColumn < 0 || nIteratorColumn >= MATgetNbColumn()) throw (const char *)"GETelement ERROR: you can't something out of the matrix size (nIteratorColumn)";
+		if (nIteratorRow < 0 || nIteratorRow >= MATgetNbRow()) throw (const char *)"GETelement ERROR: you can't something out of the matrix size (nIteratorRow)";
 	}
 	catch (const char *e)
 	{
 		cout << e << endl;
-		return NULL;
+		return 0;
 	}
 	return VECpVECmatrix.VECgetElement(nIteratorColumn)->VECgetElement(nIteratorRow);
 }
