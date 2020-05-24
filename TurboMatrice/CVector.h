@@ -62,7 +62,7 @@ CVector<T>::CVector() {
  */
 template<class T>
 CVector<T>::CVector(initializer_list<T> ILarrayParam) {
-	VECnCapacity = ILarrayParam.VECsize();
+	VECnCapacity = ILarrayParam.size();
 	VECpValueList = new T[VECnCapacity];
 	unsigned int nValueListIterator = 0;
 	for (auto pArrayIterator = ILarrayParam.begin(); pArrayIterator != ILarrayParam.end(); pArrayIterator++) {

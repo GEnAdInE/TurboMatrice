@@ -157,6 +157,7 @@
     <ClCompile Include="TurboMatrice.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CBooleanMatrix.h" />
     <ClInclude Include="Cexception.h" />
     <ClInclude Include="CPARSER.h" />
     <ClInclude Include="CSTRING.h" />

@@ -1,81 +1,78 @@
 
+//#include "CPARSER.h"
+#include "CVECTOR.h"
+#include "CPARSER.h"
+#include "CMATRICE.h"
+#include "CPRINTER.h"
+#include "CBooleanMatrix.h"
 #include <iostream>
-#include "CMatrice.h"
 
-
-int main()
+int main(unsigned int argc, const char* argv[])
 {
-	std::cout << "Hello World!\n";
 
-
-	
-	CVector<CVector<double>*> pVector; // allocate an array of iC int pointers — these are our columns 
-
-
-	pVector.VECpush(new CVector<double>{ 1 });
-	pVector.VECpush(new CVector<double>{ 2 });
-	pVector.VECpush(new CVector<double>{ 3 });
-
-	
-
-	
-	CMatrice<double> mat(3, 1, pVector);
-	for (int i = 0; i < 1; i++)
-	{
-		delete pVector.VECgetElement(i);
+	if (argc == 1) {
+		cout << "NO INPUT FILE ENTERED ... EXITING" << endl;
+		return 1;
 	}
-	std::cout << mat.MATgetElement(0, 0);
-	std::cout << " ";
-	std::cout << mat.MATgetElement(1, 0);
-	std::cout << " ";
-	std::cout << mat.MATgetElement(2, 0);
-	std::cout << "\n";
-	/*
-	std::cout << mat.MATgetElement(0, 1);
-	std::cout << " ";
-	std::cout << mat.MATgetElement(1, 1);
-	std::cout << " ";
-	std::cout << mat.MATgetElement(2, 1);
-	std::cout << " ";
-	std::cout << "\n";
-	std::cout << "\n";*/
 
+	CVector<CMatrice<double>> VECMATmatrixVector;
 
-	CVector<CVector<double>*> pVector1; // allocate an array of iC double pointers — these are our columns
-	pVector1.VECpush(new CVector<double>{ 4,5,6 });;
-	//pVector1.VECpush(new CVector<double>{ 8,10,12 });
-	CMatrice<double> mat4(1, 3, pVector1);
-	for (int i = 0; i < 1; i++)
-	{
-		delete pVector1.VECgetElement(i);
+	cout << "Please enter C value : ";
+	char pcUserInput[20];
+	cin >> pcUserInput;
+	CString STRuserInput(pcUserInput);
+	double fUserInput = STRuserInput.STRtoDouble();
+
+	for (unsigned int argvIterator = 1; argvIterator < argc; argvIterator++) {
+
+		const char* pcFiles = argv[argvIterator];
+		CParser PARparser(pcFiles, '\n', '=', false);
+
+		if (PARparser.PARisOpen()) {
+
+			CMatrice<double> MATcurrentMatrix(PARparser);
+
+			VECMATmatrixVector.VECpush(MATcurrentMatrix);
+
+			cout << "SHOWING " << pcFiles << " MATRIX : " << endl << endl;
+			PRIprint(MATcurrentMatrix);
+
+			cout << "SHOWING " << pcFiles << " MATRIX * " << pcUserInput << ": " << endl << endl;
+			PRIprint(MATcurrentMatrix*fUserInput);
+
+			cout << "SHOWING " << pcFiles << " MATRIX / " << pcUserInput << ": " << endl << endl;
+			PRIprint(MATcurrentMatrix / fUserInput);
+		}
 	}
-	std::cout << mat4.MATgetElement(0, 0);
-	std::cout << "\n";
-	std::cout << mat4.MATgetElement(0, 1);
-	std::cout << "\n";
-	std::cout << mat4.MATgetElement(0, 2);
-	std::cout << "\n";
 
-	CMatrice<double> mat0 = mat4 * mat;
-	std::cout << mat0.MATgetElement(0, 0);
-	std::cout << " ";
-	std::cout << mat0.MATgetElement(1, 0);
-	std::cout << " ";
-	std::cout << mat0.MATgetElement(2, 0);
-	std::cout << "/n";
-	std::cout << mat0.MATgetElement(0, 1);
-	std::cout << " ";
-	std::cout << mat0.MATgetElement(1, 1);
-	std::cout << " ";
-	std::cout << mat0.MATgetElement(2, 1);
-	std::cout << "/n";
-	std::cout << mat0.MATgetElement(0, 2);
-	std::cout << " ";
-	std::cout << mat0.MATgetElement(1, 2);
-	std::cout << " ";
-	std::cout << mat0.MATgetElement(2, 2);
-	std::cout << " ";
-	std::cout << mat0.MATgetElement(3, 3);
+	CMatrice<double> MATsumMatrix = VECMATmatrixVector.VECgetElement(0);
+	CMatrice<double> MATdifSumMatrix = VECMATmatrixVector.VECgetElement(0);
+	CMatrice<double> MATprodMatrix = VECMATmatrixVector.VECgetElement(0);
+
+	for (unsigned int nVectorIterator = 1; nVectorIterator < VECMATmatrixVector.VECsize(); nVectorIterator++) {
+		CMatrice<double> MATcurrentMatrix = VECMATmatrixVector.VECgetElement(nVectorIterator);
+
+		MATsumMatrix += MATcurrentMatrix;
+
+		if (nVectorIterator % 2 == 0) {
+			MATdifSumMatrix -= MATcurrentMatrix;
+		}
+		else {
+			MATdifSumMatrix += MATcurrentMatrix;
+		}
+
+		MATprodMatrix *= MATcurrentMatrix;
+	}
+
+	cout << "SHOWING RESULT OPERATOR + MATRIX : " << endl << endl;
+	PRIprint(MATsumMatrix);
+
+	cout << "SHOWING RESULT OPERATOR +- MATRIX : " << endl << endl;
+	PRIprint(MATdifSumMatrix);
+
+	cout << "SHOWING RESULT OPERATOR * MATRIX : " << endl << endl;
+	PRIprint(MATprodMatrix);
 
 	return 0;
 }
+
