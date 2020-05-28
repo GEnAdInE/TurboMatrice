@@ -1,7 +1,8 @@
 #pragma once
-#include "CMatrice.h"
+
+#include "CSTRING.h"
 #include "CVECTOR.h"
-#include "CPARSER.h"
+#include "CMATRICE.h"
 
 
 

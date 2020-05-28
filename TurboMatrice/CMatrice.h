@@ -15,7 +15,6 @@ template <class T> class CMatrice : private CVector<T>
 		CMatrice(const CMatrice<T>& MATmat);
 		CMatrice(const CParser& PARparser);
 		CMatrice(unsigned int nNbColumn, unsigned int nNbRow, CVector<CVector<T>*> VECpVECmat);
-		CMatrice(unsigned int nIteratorColumn, unsigned int nIteratorRow);
 
 		//mutators
 		void MATmodify(unsigned int nIteratorColumn, unsigned int nIteratorRow, T value);
@@ -194,46 +193,6 @@ CMatrice<T>::CMatrice(unsigned int nIteratorColumn, unsigned int nIteratorRow, C
 			VECpVECmatrix.VECgetElement(nIteratorColumn)->VECpush(VECpVECmat.VECgetElement(nIteratorColumn)->VECgetElement(nIteratorRow));
 		}
 	}
-
-}
-
-
-
-/**
- * @brief Comfort constructor of the class CMatrice for null matrix
- *
- * @throw check if the argument are of the right size to generate a matrix
- * @param iNumberColumn number of Column
- * @param iNumberbRow number of Row
- * @example CMatrice<TYPE>(2,2)
- * It will generate a matrix of size 2 full of 0
- */
-template<class T>
-inline CMatrice<T>::CMatrice(unsigned int nIteratorColumn, unsigned int nIteratorRow)
-{
-	try
-	{
-		if (nIteratorColumn <= 0 || nIteratorRow <= 0)throw (const char *)"MATRIX size ERROR: size of matrix can't be equal or inferior to 0";
-	}
-	catch (const char *e)
-	{
-		cout << e << endl;
-		return;
-	}
-
-	nNbColumn = nIteratorColumn;
-	nNbRow = nIteratorRow;
-	for (unsigned int nCount = 0; nCount < nNbColumn; ++nCount)
-		VECpVECmatrix.VECpush(new CVector<T>);
-
-	for (unsigned int nIteratorColumn = 0; nIteratorColumn < nNbColumn; nIteratorColumn++)
-	{
-		for (unsigned int nIteratorRow = 0; nIteratorRow < nNbRow; nIteratorRow++)
-		{
-			VECpVECmatrix.VECgetElement(nIteratorColumn)->VECpush(0);
-		}
-	}
-
 
 }
 
