@@ -151,6 +151,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CBooleanMatrix.cpp" />
     <ClCompile Include="Cexception.cpp" />
     <ClCompile Include="CPARSER.cpp" />
     <ClCompile Include="CSTRING.cpp" />
@@ -160,10 +161,10 @@
     <ClInclude Include="CBooleanMatrix.h" />
     <ClInclude Include="Cexception.h" />
     <ClInclude Include="CPARSER.h" />
+    <ClInclude Include="CPRINTER.h" />
     <ClInclude Include="CSTRING.h" />
-    <ClInclude Include="CVector.h" />
-    <ClInclude Include="CListe.h" />
     <ClInclude Include="CMatrice.h" />
+    <ClInclude Include="CVECTOR.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

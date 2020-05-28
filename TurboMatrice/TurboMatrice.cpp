@@ -1,5 +1,5 @@
 
-//#include "CPARSER.h"
+#pragma once
 #include "CVECTOR.h"
 #include "CPARSER.h"
 #include "CMATRICE.h"
@@ -10,6 +10,21 @@
 int main(unsigned int argc, const char* argv[])
 {
 
+
+	CVector<bool> *vect1 = new CVector<bool>{ true, false };
+	CVector<bool> *vect2 = new CVector<bool>{ false, true };
+	CVector<CVector<bool>*> array1;
+	array1.VECpush(vect1);
+	array1.VECpush(vect2);
+	CMatrice<bool> *testbool = new CMatrice<bool>(2, 2, array1);
+	PRIprint(*testbool);
+	//CBooleanMatrix test = new CBooleanMatrix(testbool);
+	//PRIprint(test.BOOgetMatrix());
+
+	
+	
+
+	/*
 	if (argc == 1) {
 		cout << "NO INPUT FILE ENTERED ... EXITING" << endl;
 		return 1;
@@ -72,7 +87,7 @@ int main(unsigned int argc, const char* argv[])
 
 	cout << "SHOWING RESULT OPERATOR * MATRIX : " << endl << endl;
 	PRIprint(MATprodMatrix);
-
+	*/
 	return 0;
 }
 

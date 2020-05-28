@@ -1,3 +1,0 @@
-﻿  TurboMatrice.cpp
-c:\users\onero\documents\3a\turbomatrice\turbomatrice\matrice.h(179): warning C4715: 'CMatrice<int>::MATgetElement' : les chemins de contrôle ne retournent pas tous une valeur
-  TurboMatrice.vcxproj -> C:\Users\onero\Documents\3A\TurboMatrice\x64\Debug\TurboMatrice.exe
