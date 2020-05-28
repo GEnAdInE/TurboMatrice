@@ -21,7 +21,7 @@ public:
 	CBooleanMatrix operator|(CBooleanMatrix &BOOmatrix);
 
 	template<class T>
-	CBooleanMatrix BOOgenerator(CMatrice<T> MAT1, CMatrice<T> MAT2);
+	CBooleanMatrix(CMatrice<T> MAT1, CMatrice<T> MAT2);
 
 
 };
@@ -29,7 +29,7 @@ public:
 
 
 template<class T>
-CBooleanMatrix CBooleanMatrix::BOOgenerator(CMatrice<T> MAT1, CMatrice<T> MAT2)
+CBooleanMatrix::CBooleanMatrix(CMatrice<T> MAT1, CMatrice<T> MAT2)
 {
 	try
 	{
