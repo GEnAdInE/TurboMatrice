@@ -10,17 +10,37 @@
 int main(unsigned int argc, const char* argv[])
 {
 
+	
 	CVector<bool> *vect1 = new CVector<bool>{ true, false };
 	CVector<bool> *vect2 = new CVector<bool>{ false, true };
 	CVector<CVector<bool>*> array1;
 	array1.VECpush(vect1);
 	array1.VECpush(vect2);
 	CMatrice<bool> testbool(2, 2, array1);
+
+
+
+
+	CVector<bool> *vect3 = new CVector<bool>{ true, true };
+	CVector<bool> *vect4 = new CVector<bool>{ true, true };
+	CVector<CVector<bool>*> array2;
+	array2.VECpush(vect3);
+	array2.VECpush(vect4);
+
+	CMatrice<bool> testbool2(2, 2, array2);
+
 	PRIprint(testbool);
+	PRIprint(testbool2);
 
 	CBooleanMatrix test(testbool);
+	CBooleanMatrix test2(testbool2);
 	PRIprint(test.BOOgetMatrix());
 
+	CBooleanMatrix result = test.operator&(test2);
+	PRIprint(result.BOOgetMatrix());
+	std::cout << "test" << endl;
+	CBooleanMatrix result2 = test.operator|(test2);
+	PRIprint(result2.BOOgetMatrix());
 	/*
 		if (argc == 1) {
 		cout << "NO INPUT FILE ENTERED ... EXITING" << endl;

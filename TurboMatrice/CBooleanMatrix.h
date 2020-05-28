@@ -19,7 +19,7 @@ public:
 
 	CBooleanMatrix operator&(CBooleanMatrix &BOOmatrix);
 	CBooleanMatrix operator|(CBooleanMatrix &BOOmatrix);
-	void operator=(CBooleanMatrix &BOOmatrix);
+	void operator=(CBooleanMatrix BOOmatrix);
 
 	template<class T>
 	CBooleanMatrix(CMatrice<T> MAT1, CMatrice<T> MAT2);
@@ -145,7 +145,7 @@ CBooleanMatrix CBooleanMatrix::operator|(CBooleanMatrix & BOOmatrix)
 	return BOOresult;
 }
 
-void CBooleanMatrix::operator=(CBooleanMatrix & BOOmatrix)
+void CBooleanMatrix::operator=(CBooleanMatrix BOOmatrix)
 {
 	this->MATmatrix = BOOmatrix.MATmatrix;
 }
