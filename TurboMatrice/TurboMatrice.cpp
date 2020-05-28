@@ -22,8 +22,7 @@ int main(unsigned int argc, const char* argv[])
 	CBooleanMatrix test = new CBooleanMatrix(*testbool);
 	PRIprint(test.BOOgetMatrix());
 
-	CBooleanMatrix *result;
-	result = &test.operator&(test);
+	CBooleanMatrix *result = &test.operator&(test);
 	PRIprint(result->BOOgetMatrix());
 	//CBooleanMatrix test = new CBooleanMatrix(testbool);
 	//PRIprint(test.BOOgetMatrix());

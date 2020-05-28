@@ -12,6 +12,7 @@ public:
 	CBooleanMatrix(void);
 	CBooleanMatrix(CBooleanMatrix *BOOparam);
 	CBooleanMatrix(CMatrice<bool> MATmatrix);
+	~CBooleanMatrix();
 
 
 	CMatrice<bool> BOOgetMatrix();
@@ -88,6 +89,10 @@ inline CBooleanMatrix::CBooleanMatrix(CMatrice<bool> MATmatrix)
 	this->MATmatrix.operator=(CMatrice<bool>(MATmatrix));
 }
 
+inline CBooleanMatrix::~CBooleanMatrix()
+{
+}
+
 CBooleanMatrix CBooleanMatrix::operator&(CBooleanMatrix & BOOmatrix)
 {
 	try
@@ -100,7 +105,7 @@ CBooleanMatrix CBooleanMatrix::operator&(CBooleanMatrix & BOOmatrix)
 		return CBooleanMatrix();
 	}
 
-	CBooleanMatrix *BOOresult = new CBooleanMatrix(this);
+	CBooleanMatrix BOOresult = CBooleanMatrix(this);
 
 	for (unsigned int nIteratorColumn = 0; nIteratorColumn < MATmatrix.MATgetNbColumn(); nIteratorColumn++)
 	{
@@ -126,7 +131,7 @@ CBooleanMatrix CBooleanMatrix::operator|(CBooleanMatrix & BOOmatrix)
 		return CBooleanMatrix();
 	}
 
-	CBooleanMatrix *BOOresult = new CBooleanMatrix(this);
+	CBooleanMatrix BOOresult = new CBooleanMatrix(this);
 
 	for (unsigned int nIteratorColumn = 0; nIteratorColumn < MATmatrix.MATgetNbColumn(); nIteratorColumn++)
 	{
