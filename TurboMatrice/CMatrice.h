@@ -11,8 +11,8 @@ template <class T> class CMatrice : private CVector<T>
 
 		//constructors
 		CMatrice(void);
-		CMatrice(const T element);
 		CMatrice(const CMatrice<T>& MATmat);
+		//CMatrice(const T element);
 		CMatrice(const CParser& PARparser);
 		CMatrice(unsigned int nNbColumn, unsigned int nNbRow, CVector<CVector<T>*> VECpVECmat);
 
@@ -72,10 +72,12 @@ CMatrice<T>::CMatrice(void)
 
 }
 
+
 /**
  * @brief Comfort constructor to construct the matrix with an empty vector
  *
  */
+ /*
 template <class T>
 CMatrice<T>::CMatrice(const T element)
 {
@@ -84,6 +86,7 @@ CMatrice<T>::CMatrice(const T element)
 	VECpVECmatrix.VECpush(new CVector<T>);
 	VECpVECmatrix.VECgetElement(0)->VECpush(element);
 }
+*/
 
 
 /**

@@ -18,8 +18,12 @@ int main(unsigned int argc, const char* argv[])
 	CMatrice<bool> *testbool = new CMatrice<bool>(2, 2, array1);
 	PRIprint(*testbool);
 
-	CBooleanMatrix *test = new CBooleanMatrix(testbool);
-	PRIprint(test->BOOgetMatrix());
+	CBooleanMatrix test = new CBooleanMatrix(*testbool);
+	PRIprint(test.BOOgetMatrix());
+
+	CBooleanMatrix *result;
+	result = &test.operator&(test);
+	PRIprint(result->BOOgetMatrix());
 
 	/*
 		if (argc == 1) {

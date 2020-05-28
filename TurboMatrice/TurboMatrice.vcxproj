@@ -151,7 +151,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="CBooleanMatrix.cpp" />
     <ClCompile Include="Cexception.cpp" />
     <ClCompile Include="CPARSER.cpp" />
     <ClCompile Include="CSTRING.cpp" />

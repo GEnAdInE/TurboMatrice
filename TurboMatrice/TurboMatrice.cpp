@@ -18,6 +18,13 @@ int main(unsigned int argc, const char* argv[])
 	array1.VECpush(vect2);
 	CMatrice<bool> *testbool = new CMatrice<bool>(2, 2, array1);
 	PRIprint(*testbool);
+
+	CBooleanMatrix test = new CBooleanMatrix(*testbool);
+	PRIprint(test.BOOgetMatrix());
+
+	CBooleanMatrix *result;
+	result = &test.operator&(test);
+	PRIprint(result->BOOgetMatrix());
 	//CBooleanMatrix test = new CBooleanMatrix(testbool);
 	//PRIprint(test.BOOgetMatrix());
 

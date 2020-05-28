@@ -18,6 +18,7 @@ public:
 
 	CBooleanMatrix operator&(CBooleanMatrix &BOOmatrix);
 	CBooleanMatrix operator|(CBooleanMatrix &BOOmatrix);
+	void operator=(CBooleanMatrix &BOOmatrix);
 
 	template<class T>
 	CBooleanMatrix(CMatrice<T> MAT1, CMatrice<T> MAT2);
@@ -65,26 +66,26 @@ CBooleanMatrix::CBooleanMatrix(CMatrice<T> MAT1, CMatrice<T> MAT2)
 	return result;
 }
 
-CMatrice<bool> CBooleanMatrix::BOOgetMatrix()
+inline CMatrice<bool> CBooleanMatrix::BOOgetMatrix()
 {
 	return MATmatrix;
 }
 
-CBooleanMatrix::CBooleanMatrix(void)
+inline CBooleanMatrix::CBooleanMatrix(void)
 {
-	MATmatrix = new CMatrice<bool>();
+	MATmatrix.operator=(CMatrice<bool>());
 }
 
-CBooleanMatrix::CBooleanMatrix(CBooleanMatrix * BOOparam)
+inline CBooleanMatrix::CBooleanMatrix(CBooleanMatrix * BOOparam)
 {
 
-	MATmatrix = CMatrice<bool>(BOOparam);
+	MATmatrix.operator=(CMatrice<bool>(BOOparam->MATmatrix));
 
 }
 
-CBooleanMatrix::CBooleanMatrix(CMatrice<bool> MATmatrix)
+inline CBooleanMatrix::CBooleanMatrix(CMatrice<bool> MATmatrix)
 {
-	this->MATmatrix = CMatrice<bool>(MATmatrix);
+	this->MATmatrix.operator=(CMatrice<bool>(MATmatrix));
 }
 
 CBooleanMatrix CBooleanMatrix::operator&(CBooleanMatrix & BOOmatrix)
@@ -107,7 +108,7 @@ CBooleanMatrix CBooleanMatrix::operator&(CBooleanMatrix & BOOmatrix)
 		{
 			bool value;
 			value = MATmatrix.MATgetElement(nIteratorColumn, nIteratorRow) & BOOmatrix.MATmatrix.MATgetElement(nIteratorColumn, nIteratorRow);
-			BOOresult->MATmodify(nIteratorColumn, nIteratorRow, value);
+			this->MATmatrix.MATmodify(nIteratorColumn, nIteratorRow, value);
 		}
 	}
 	return BOOresult;
@@ -133,8 +134,13 @@ CBooleanMatrix CBooleanMatrix::operator|(CBooleanMatrix & BOOmatrix)
 		{
 			bool value;
 			value = MATmatrix.MATgetElement(nIteratorColumn, nIteratorRow) | BOOmatrix.MATmatrix.MATgetElement(nIteratorColumn, nIteratorRow);
-			BOOresult->MATmodify(nIteratorColumn, nIteratorRow, value);
+			this->MATmatrix.MATmodify(nIteratorColumn, nIteratorRow, value);
 		}
 	}
 	return BOOresult;
+}
+
+void CBooleanMatrix::operator=(CBooleanMatrix & BOOmatrix)
+{
+	this->MATmatrix = BOOmatrix.MATmatrix;
 }

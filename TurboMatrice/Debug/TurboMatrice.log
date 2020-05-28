@@ -1,5 +1,2 @@
-﻿  CBooleanMatrix.cpp
-  TurboMatrice.cpp
-  Génération de code en cours...
-TurboMatrice.obj : error LNK2005: "public: __thiscall CMatrice<double>::CMatrice<double>(class CParser const &)" (??0?$CMatrice@N@@QAE@ABVCParser@@@Z) déjà défini(e) dans CBooleanMatrix.obj
-C:\Users\onero\Documents\3A\TurboMatrice\Debug\TurboMatrice.exe : fatal error LNK1169: un ou plusieurs symboles définis à différentes reprises ont été rencontrés
+﻿  TurboMatrice.cpp
+  TurboMatrice.vcxproj -> C:\Users\onero\Documents\3A\TurboMatrice\Debug\TurboMatrice.exe
