@@ -15,15 +15,11 @@ int main(unsigned int argc, const char* argv[])
 	CVector<CVector<bool>*> array1;
 	array1.VECpush(vect1);
 	array1.VECpush(vect2);
-	CMatrice<bool> *testbool = new CMatrice<bool>(2, 2, array1);
-	PRIprint(*testbool);
+	CMatrice<bool> testbool(2, 2, array1);
+	PRIprint(testbool);
 
-	CBooleanMatrix test = new CBooleanMatrix(*testbool);
+	CBooleanMatrix test(testbool);
 	PRIprint(test.BOOgetMatrix());
-
-	CBooleanMatrix *result;
-	result = &test.operator&(test);
-	PRIprint(result->BOOgetMatrix());
 
 	/*
 		if (argc == 1) {
